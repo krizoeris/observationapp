@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import Card from '../components/Card'
 import Table from '../components/Table'
 import Modal from '../components/Modal'
+import Pagination from '../components/Pagination'
 import ActionButtonOption from '../components/ActionButtonOption'
 import SelectDropdown from '../components/SelectDropdown'
 
@@ -13,13 +14,15 @@ const firstLetterCaps = (string) => {
 const Users = () => {
 
     const [state, setState] = useState({
-        loading: false,
+        loading: true,
         paginate: [],
         users: [],
         filter: {
             fname: false,
             lname: false,
-            type: false
+            type: false,
+            page: 1,
+            limit: 10
         }
     })
 
@@ -36,19 +39,25 @@ const Users = () => {
         let response = await fetch(url)
         response = await response.json()
 
-        setState({
-            ...state,
-            paginate: response.paginate,
-            users: response.data,
-            loading: true
-        })
+        if(response.success) {
+            setState({
+                ...state,
+                paginate: response.paginate,
+                users: response.data,
+                loading: false,
+            })
+        } else {
+            setState({
+                ...state,
+                loading: false
+            })
+        }
     }
 
     const handleFilter = (e, name) => {
         let all = (e.value === "All" && name === "type") ? true : false
         setState({
             ...state,
-            loading: false,
             filter: {
                 ...state.filter,
                 [name]: (e.value.length === 0 || all) ? false : e.value
@@ -59,17 +68,43 @@ const Users = () => {
     let filter = state.filter
 
     useEffect(()=>{
-        getUsersData(1, 10, filter.fname, filter.lname, filter.type)
-        console.log(filter)
+        const handler = setTimeout(() => {
+            setState({...state, loading: true})
+            getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)
+            console.log(state)
+        }, 500)
+
+        return () => {
+            clearTimeout(handler)
+        }
     }, [filter])
+
+    useEffect(()=>{
+        setState({
+            ...state, 
+            filter: {
+                ...state.filter,
+                page: 1
+            }
+        })
+    }, [filter.limit])
     
     return (
         <div className="Users container mt-4">
             <Header title="Users">
-                <button className="btn btn-success mt-2">Add New User</button>
+                <div class="btn-group btn-group-toggle mt-2" data-toggle="buttons">
+                    <label class="btn bg-main">
+                        <input type="radio" name="options" id="option1" /> Import
+                    </label>
+                    <label class="btn bg-main">
+                        <input type="radio" name="options" id="option2" /> Export
+                    </label>
+                </div>
+
+                <button className="btn btn-success ml-2 mt-2" data-toggle="modal" data-target="#addUser">Add New User</button>
             </Header>
 
-            <Card class="shadow-sm border-0" classBody="p-0">
+            <Card class="shadow-sm border-0 mb-2" classBody="p-0">
                 <Table class="m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
                     <tr class="bg-light">
                         <td width="20px"><input type="checkbox" class="checkTable table-top"/></td>
@@ -78,7 +113,7 @@ const Users = () => {
                         <td><SelectDropdown handleFilter={handleFilter} filterName={'type'} options={['All', 'Teacher', 'Observer', 'Facilitator', 'Admin']} /></td>
                         <td width="20px"></td>
                     </tr>
-                    {state.loading && 
+                    {!state.loading && 
                         state.users.map(user => 
                         <tr>
                             <td class="pt-3"><input type="checkbox" class="checkTable" /></td>
@@ -94,10 +129,16 @@ const Users = () => {
                             </td>
                         </tr>
                     )}
-                    {!state.loading && <tr><td colSpan="5">Loading...</td></tr>}
-                    {state.users.length === 0 && <tr><td colSpan="5">No records found</td></tr>}
+                    {state.loading && <tr><td colSpan="5">Loading...</td></tr>}
+                    {(state.users.length === 0 && !state.loading) && <tr><td colSpan="5">No records found</td></tr>}
                 </Table>
             </Card>
+
+            <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
+
+            <Modal target="addUser" title="Add User">
+                sample
+            </Modal>
         </div>
     )
 }

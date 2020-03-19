@@ -16,6 +16,10 @@ body {
     background: #2653a7 !important;
 }
 
+.bg-main {
+    background: #2653a7 !important;
+    color: #fff;
+}
 
 input[type=checkbox].checkTable
 {
