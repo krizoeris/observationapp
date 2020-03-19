@@ -6,6 +6,7 @@ import Modal from '../components/Modal'
 import Pagination from '../components/Pagination'
 import ActionButtonOption from '../components/ActionButtonOption'
 import SelectDropdown from '../components/SelectDropdown'
+import { ReactComponent as LoadingAnimation} from '../components/loading.svg'
 
 const firstLetterCaps = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -68,8 +69,8 @@ const Users = () => {
     let filter = state.filter
 
     useEffect(()=>{
+        setState({...state, loading: true})
         const handler = setTimeout(() => {
-            setState({...state, loading: true})
             getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)
             console.log(state)
         }, 500)
@@ -111,7 +112,7 @@ const Users = () => {
                         <td><input type="text" class="form-control" placeholder="Filter first name" onChange={(e) => { handleFilter(e.target, 'fname')}} /></td>
                         <td><input type="text" class="form-control" placeholder="Filter last name" onChange={(e) => { handleFilter(e.target, 'lname')}} /></td>
                         <td><SelectDropdown handleFilter={handleFilter} filterName={'type'} options={['All', 'Teacher', 'Observer', 'Facilitator', 'Admin']} /></td>
-                        <td width="20px"></td>
+                        <td width="64px"></td>
                     </tr>
                     {!state.loading && 
                         state.users.map(user => 
@@ -129,7 +130,11 @@ const Users = () => {
                             </td>
                         </tr>
                     )}
-                    {state.loading && <tr><td colSpan="5">Loading...</td></tr>}
+                    {state.loading && 
+                        <tr>
+                            <td colSpan="5"><center><LoadingAnimation style={{margin: '0 auto', height: 55, width: 55 }} /></center></td>
+                        </tr>
+                    }
                     {(state.users.length === 0 && !state.loading) && <tr><td colSpan="5">No records found</td></tr>}
                 </Table>
             </Card>
