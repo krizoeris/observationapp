@@ -8,6 +8,8 @@ import ActionButtonOption from '../components/ActionButtonOption'
 import SelectDropdown from '../components/SelectDropdown'
 import { ReactComponent as LoadingAnimation} from '../components/loading.svg'
 
+import UserCreate from './components/UserCreate'
+
 const firstLetterCaps = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -72,7 +74,6 @@ const Users = () => {
         setState({...state, loading: true})
         const handler = setTimeout(() => {
             getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)
-            console.log(state)
         }, 500)
 
         return () => {
@@ -142,7 +143,7 @@ const Users = () => {
             <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
 
             <Modal target="addUser" title="Add User">
-                sample
+                <UserCreate />
             </Modal>
         </div>
     )
