@@ -34,7 +34,7 @@ const UserCreate = () => {
     const handleChangeRoles = newValue => { rolesInput = newValue }
     const handleChangeSubjects = newValue => { subjectsInput = newValue }
 
-    const handleCreateUser = e => {
+    const handleCreateUser = async e => {
         e.preventDefault()
         let data = {
             first_name: fnameInput.value,
@@ -49,6 +49,16 @@ const UserCreate = () => {
         })
 
         console.log(data)
+
+        const submitUser = await fetch(process.env.REACT_APP_BACKEND_URL+'/users', {
+            method: 'POST',
+            headers: {"Content-type": "application/json"},
+            body: JSON.stringify(data)
+        })
+        
+        const response = submitUser.json()
+
+        console.log(response)
     }
 
     if(subjects.length === 0) {
@@ -88,7 +98,7 @@ const UserCreate = () => {
             </div>
             <div className="form-group">
                 <label>Roles</label>
-                <Select options={roles} defaultValue={[roles[0], roles[1]]} isMulti onChange={handleChangeRoles}/>
+                <Select options={roles} isMulti onChange={handleChangeRoles}/>
             </div>
             <div className="form-group">
                 <label>Subjects</label>
