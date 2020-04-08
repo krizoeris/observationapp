@@ -14,6 +14,14 @@ const firstLetterCaps = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+const sliceAndCapsArr = (array) => {
+    let string
+
+    array.map(arr => string = (string) ? string+', '+firstLetterCaps(arr) : firstLetterCaps(arr))
+
+    return string
+}
+
 const Users = () => {
 
     const [state, setState] = useState({
@@ -90,6 +98,8 @@ const Users = () => {
             }
         })
     }, [filter.limit])
+
+    console.log(state.paginate)
     
     return (
         <div className="Users container mt-4">
@@ -121,7 +131,7 @@ const Users = () => {
                             <td class="pt-3"><input type="checkbox" class="checkTable" /></td>
                             <td class="pt-3">{user.first_name}</td>
                             <td class="pt-3">{user.last_name}</td>
-                            <td class="pt-3">{firstLetterCaps(user.type)}</td>
+                            <td class="pt-3">{sliceAndCapsArr(user.type)}</td>
                             <td>
                                 <ActionButtonOption>
                                     <a class="dropdown-item" href="#">Edit</a>
