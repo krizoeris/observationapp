@@ -9,6 +9,7 @@ import SelectDropdown from '../components/SelectDropdown'
 import { ReactComponent as LoadingAnimation} from '../components/loading.svg'
 
 import UserCreate from './components/UserCreate'
+import UserEdit from './components/UserEdit'
 
 const firstLetterCaps = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -16,9 +17,7 @@ const firstLetterCaps = (string) => {
 
 const sliceAndCapsArr = (array) => {
     let string
-
     array.map(arr => string = (string) ? string+', '+firstLetterCaps(arr) : firstLetterCaps(arr))
-
     return string
 }
 
@@ -35,6 +34,11 @@ const Users = () => {
             page: 1,
             limit: 10
         }
+    })
+
+    const [opState, setOpState] = useState({
+        edit: [],
+        delete: []
     })
 
     const getUsersData = async (page, limit, fname, lname, type) => {
@@ -63,6 +67,13 @@ const Users = () => {
                 loading: false
             })
         }
+    }
+
+    const handleEdit = (user) => {
+        setOpState({
+            ...opState,
+            edit: user
+        })
     }
 
     const handleFilter = (e, name) => {
@@ -98,8 +109,6 @@ const Users = () => {
             }
         })
     }, [filter.limit])
-
-    console.log(state.paginate)
     
     return (
         <div className="Users container mt-4">
@@ -116,14 +125,16 @@ const Users = () => {
                 <button className="btn btn-success ml-2 mt-2" data-toggle="modal" data-target="#addUser">Add New User</button>
             </Header>
 
+            <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
+
             <Card class="shadow-sm border-0 mb-2" classBody="p-0">
                 <Table class="m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
                     <tr class="bg-light">
-                        <td width="20px"><input type="checkbox" class="checkTable table-top"/></td>
-                        <td><input type="text" class="form-control" placeholder="Filter first name" onChange={(e) => { handleFilter(e.target, 'fname')}} /></td>
-                        <td><input type="text" class="form-control" placeholder="Filter last name" onChange={(e) => { handleFilter(e.target, 'lname')}} /></td>
-                        <td><SelectDropdown handleFilter={handleFilter} filterName={'type'} options={['All', 'Teacher', 'Observer', 'Facilitator', 'Admin']} /></td>
-                        <td width="64px"></td>
+                        <td><input type="checkbox" class="checkTable table-top"/></td>
+                        <td width="35%"><input type="text" class="form-control" placeholder="Filter first name" onChange={(e) => { handleFilter(e.target, 'fname')}} /></td>
+                        <td width="35%"><input type="text" class="form-control" placeholder="Filter last name" onChange={(e) => { handleFilter(e.target, 'lname')}} /></td>
+                        <td width="30%"><SelectDropdown handleFilter={handleFilter} filterName={'type'} options={['All', 'Teacher', 'Observer', 'Facilitator', 'Admin']} /></td>
+                        <td style={{minWidth: '64px'}}></td>
                     </tr>
                     {!state.loading && 
                         state.users.map(user => 
@@ -134,7 +145,7 @@ const Users = () => {
                             <td class="pt-3">{sliceAndCapsArr(user.type)}</td>
                             <td>
                                 <ActionButtonOption>
-                                    <a class="dropdown-item" href="#">Edit</a>
+                                    <button class="dropdown-item" data-toggle="modal" data-target="#editUser" onClick={() => handleEdit(user)}>Edit</button>
                                     <a class="dropdown-item" href="#">Delete</a>
                                     <a class="dropdown-item" href="#">Archive</a>
                                 </ActionButtonOption>
@@ -150,10 +161,12 @@ const Users = () => {
                 </Table>
             </Card>
 
-            <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
-
             <Modal target="addUser" title="Add User">
-                <UserCreate />
+                <UserCreate loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
+            </Modal>
+
+            <Modal target="editUser" title="Edit User">
+                {opState.edit.length !== 0 && <UserEdit user={opState.edit} /> }
             </Modal>
         </div>
     )

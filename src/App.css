@@ -35,3 +35,23 @@ input[type=checkbox].checkTable
 input[type=checkbox].table-top {
     margin-top: 14px;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #cccccc; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555; 
+}

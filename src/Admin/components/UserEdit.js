@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
 
-const UserCreate = ({loadUser}) => {
+const UserCreate = ({user}) => {
+    console.log(user)
     const [state, setState] = useState({
         loading: true,
         subjects: [],
@@ -46,7 +47,6 @@ const UserCreate = ({loadUser}) => {
 
     const validate = () => {
         let fnameError, lnameError, emailError, passwordError, rolesError, subjectsError = ""
-
         if(!fnameInput.value) {
             fnameError = "First Name must not be empty"
         }
@@ -141,30 +141,9 @@ const UserCreate = ({loadUser}) => {
                 })
                 
                 const responseSubjectUser = await submitUserSubject.json()
+    
+                console.log(subjects)
             }
-
-           if(response.success) {
-                loadUser()
-                fnameInput.value = ''
-                lnameInput.value = '' 
-                emailInput.value = '' 
-                passwordInput.value = ''
-                inviteInput.value = ''
-                
-                setState({
-                    ...state,
-                    error: {
-                        fnameError: '',
-                        lnameError: '',
-                        emailError: '',
-                        passwordError: '',
-                        rolesError: '',
-                        subjectsError: ''
-                    },
-                    rolesInput: [],
-                    subjectsInput: []
-                })
-           }
         }
     }
 
@@ -183,13 +162,15 @@ const UserCreate = ({loadUser}) => {
         getSubjectsData()
     }, [])
 
+    console.log(state.error)
+
     return (
         <form onSubmit={handleCreateUser}>
             <div className="form-group">
                 <div className="form-row">
                     <div className="col">
                         <label>First Name</label>
-                        <input type="text" className={(!state.error.fnameError) ? `form-control` : `form-control border border-danger`} placeholder="First name" ref={e => fnameInput = e}/>
+                        <input type="text" className={(!state.error.fnameError) ? `form-control` : `form-control border border-danger`} placeholder="First name" ref={e => fnameInput = e} value={user.first_name}/>
                         <small className="text-danger bold">{state.error.fnameError}</small>
                     </div>
                     <div className="col">
@@ -211,12 +192,12 @@ const UserCreate = ({loadUser}) => {
             </div>
             <div className="form-group">
                 <label>Roles</label>
-                <Select value={state.rolesInput} options={roles} styles={state.error.rolesError && selectStyleInValid} isMulti onChange={handleChangeRoles} />
+                <Select options={roles} styles={state.error.rolesError && selectStyleInValid} isMulti onChange={handleChangeRoles} />
                 <small className="text-danger bold">{state.error.rolesError}</small>
             </div>
             <div className="form-group">
                 <label>Subjects</label>
-                <Select value={state.subjectsInput} options={subjects} styles={state.error.subjectsError && selectStyleInValid} isMulti onChange={handleChangeSubjects} />
+                <Select options={subjects} styles={state.error.subjectsError && selectStyleInValid} isMulti onChange={handleChangeSubjects} />
                 <small className="text-danger bold">{state.error.subjectsError}</small>
             </div>
             <div className="form-group">

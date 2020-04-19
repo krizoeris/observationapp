@@ -21,19 +21,29 @@ const Navigation = () => {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mx-auto">
                         <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">Home</NavLink>
+                            <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">
+                                <i class="fas fa-home"></i> Home
+                            </NavLink>
                         </li>
                         <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/users">Users</NavLink>
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/users">
+                                <i class="fas fa-user"></i> Users
+                            </NavLink>
                         </li>
                         <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/subjects">Subjects</NavLink>
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/subjects">
+                                <i class="fas fa-book"></i> Subjects
+                            </NavLink>
                         </li>
                         <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/grades">Grades</NavLink>
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/grades">
+                                <i class="fas fa-file"></i> Grades
+                            </NavLink>
                         </li>
                         <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/forms">Forms</NavLink>
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/forms">
+                                <i class="fas fa-list"></i> Forms
+                            </NavLink>
                         </li>
                     </ul>
                     <ul className="navbar-nav">
