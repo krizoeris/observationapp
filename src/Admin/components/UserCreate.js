@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
+import { ReactComponent as LoadingAnimation} from '../../components/loadingButton.svg'
 
 const UserCreate = ({loadUser}) => {
     const [state, setState] = useState({
         loading: true,
+        success: false,
         subjects: [],
         rolesInput: [],
         subjectsInput: [],
@@ -96,6 +98,7 @@ const UserCreate = ({loadUser}) => {
 
     const handleCreateUser = async e => {
         e.preventDefault()
+        setState({...state, loading: true})
         if(validate()) {
             let data = {
                 first_name: fnameInput.value,
@@ -145,14 +148,10 @@ const UserCreate = ({loadUser}) => {
 
            if(response.success) {
                 loadUser()
-                fnameInput.value = ''
-                lnameInput.value = '' 
-                emailInput.value = '' 
-                passwordInput.value = ''
-                inviteInput.value = ''
-                
                 setState({
                     ...state,
+                    success: true,
+                    loading: false,
                     error: {
                         fnameError: '',
                         lnameError: '',
@@ -164,8 +163,24 @@ const UserCreate = ({loadUser}) => {
                     rolesInput: [],
                     subjectsInput: []
                 })
+
+                return true
            }
         }
+    }
+
+    const handleClear = () => {
+
+        setState({
+            ...state,
+            success: false
+        })
+        
+        fnameInput = ''
+        lnameInput = '' 
+        emailInput = '' 
+        passwordInput = ''
+        inviteInput = ''
     }
 
     const selectStyleInValid = { control: styles => ({...styles, borderColor: 'red'}) }
@@ -183,54 +198,68 @@ const UserCreate = ({loadUser}) => {
         getSubjectsData()
     }, [])
 
+    
     return (
-        <form onSubmit={handleCreateUser}>
-            <div className="form-group">
-                <div className="form-row">
-                    <div className="col">
-                        <label>First Name</label>
-                        <input type="text" className={(!state.error.fnameError) ? `form-control` : `form-control border border-danger`} placeholder="First name" ref={e => fnameInput = e}/>
-                        <small className="text-danger bold">{state.error.fnameError}</small>
-                    </div>
-                    <div className="col">
-                        <label>Last Name</label>
-                        <input type="text" className={(!state.error.lnameError) ? `form-control` : `form-control border border-danger`} placeholder="Last name" ref={e => lnameInput = e}/>
-                        <small className="text-danger bold">{state.error.lnameError}</small>
-                    </div>
+        <div>
+            {(state.success) ?
+                <div className="text-center">
+                    <h4 className="text-success mb-4">Successfully Added!</h4>
+                    <button className="btn btn-danger" data-dismiss="modal" aria-label="Close" onClick={handleClear}>Done</button>
                 </div>
-            </div>
-            <div className="form-group">
-                <label>Email address</label>
-                <input type="email" className={(!state.error.emailError) ? `form-control` : `form-control border border-danger`} placeholder="Enter email" ref={e => emailInput = e}/>
-                <small className="text-danger bold">{state.error.emailError}</small>
-            </div>
-            <div className="form-group">
-                <label>Password</label>
-                <input type="password" className={(!state.error.passwordError) ? `form-control` : `form-control border border-danger`} placeholder="Password" ref={e => passwordInput = e}/>
-                <small className="text-danger bold">{state.error.passwordError}</small>
-            </div>
-            <div className="form-group">
-                <label>Roles</label>
-                <Select value={state.rolesInput} options={roles} styles={state.error.rolesError && selectStyleInValid} isMulti onChange={handleChangeRoles} />
-                <small className="text-danger bold">{state.error.rolesError}</small>
-            </div>
-            <div className="form-group">
-                <label>Subjects</label>
-                <Select value={state.subjectsInput} options={subjects} styles={state.error.subjectsError && selectStyleInValid} isMulti onChange={handleChangeSubjects} />
-                <small className="text-danger bold">{state.error.subjectsError}</small>
-            </div>
-            <div className="form-group">
-                <div className="custom-control custom-checkbox">
-                    <input type="checkbox" id="inviteUser" className="custom-control-input" ref={e => inviteInput = e} />
-                    <label className="custom-control-label" for="inviteUser" >Invite User</label>
-                </div>
-            </div>
-            <div className="d-flex justify-content-between">
-                <button type="submit" className="btn btn-primary">Add New User</button>
-                <button className="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close">Cancel</button>
-            </div>
-        </form>
+            :
+                <form onSubmit={handleCreateUser}>
+                    <div className="form-group">
+                        <div className="form-row">
+                            <div className="col">
+                                <label>First Name</label>
+                                <input type="text" className={(!state.error.fnameError) ? `form-control` : `form-control border border-danger`} placeholder="First name" ref={e => fnameInput = e}/>
+                                <small className="text-danger bold">{state.error.fnameError}</small>
+                            </div>
+                            <div className="col">
+                                <label>Last Name</label>
+                                <input type="text" className={(!state.error.lnameError) ? `form-control` : `form-control border border-danger`} placeholder="Last name" ref={e => lnameInput = e}/>
+                                <small className="text-danger bold">{state.error.lnameError}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label>Email address</label>
+                        <input type="email" className={(!state.error.emailError) ? `form-control` : `form-control border border-danger`} placeholder="Enter email" ref={e => emailInput = e}/>
+                        <small className="text-danger bold">{state.error.emailError}</small>
+                    </div>
+                    <div className="form-group">
+                        <label>Password</label>
+                        <input type="password" className={(!state.error.passwordError) ? `form-control` : `form-control border border-danger`} placeholder="Password" ref={e => passwordInput = e}/>
+                        <small className="text-danger bold">{state.error.passwordError}</small>
+                    </div>
+                    <div className="form-group">
+                        <label>Roles</label>
+                        <Select value={state.rolesInput} options={roles} styles={state.error.rolesError && selectStyleInValid} isMulti onChange={handleChangeRoles} />
+                        <small className="text-danger bold">{state.error.rolesError}</small>
+                    </div>
+                    <div className="form-group">
+                        <label>Subjects</label>
+                        <Select value={state.subjectsInput} options={subjects} styles={state.error.subjectsError && selectStyleInValid} isMulti onChange={handleChangeSubjects} />
+                        <small className="text-danger bold">{state.error.subjectsError}</small>
+                    </div>
+                    <div className="form-group">
+                        <div className="custom-control custom-checkbox">
+                            <input type="checkbox" id="inviteUser" className="custom-control-input" ref={e => inviteInput = e} />
+                            <label className="custom-control-label" for="inviteUser" >Invite User</label>
+                        </div>
+                    </div>
+                    <div className="d-flex justify-content-between">
+                        {(state.loading) 
+                            ? <button type="submit" className="btn btn-primary" style={{width: 127.55}} disabled><LoadingAnimation style={{margin: '0 auto', height: 20, width: '100%'}} /></button>
+                            : <button type="submit" className="btn btn-primary">Add New User</button>
+                        }
+                        <button className="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close">Cancel</button>
+                    </div>
+                </form>
+            }
+        </div>
     )
+    
 }
 
 export default UserCreate

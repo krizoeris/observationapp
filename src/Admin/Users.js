@@ -111,7 +111,7 @@ const Users = () => {
     }, [filter.limit])
     
     return (
-        <div className="Users container mt-4">
+        <div className="Users container mt-4 mb-4">
             <Header title="Users">
                 <div class="btn-group btn-group-toggle mt-2" data-toggle="buttons">
                     <label class="btn bg-main">
@@ -125,10 +125,8 @@ const Users = () => {
                 <button className="btn btn-success ml-2 mt-2" data-toggle="modal" data-target="#addUser">Add New User</button>
             </Header>
 
-            <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
-
             <Card class="shadow-sm border-0 mb-2" classBody="p-0">
-                <Table class="m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
+                <Table class="table-sm m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
                     <tr class="bg-light">
                         <td><input type="checkbox" class="checkTable table-top"/></td>
                         <td width="35%"><input type="text" class="form-control" placeholder="Filter first name" onChange={(e) => { handleFilter(e.target, 'fname')}} /></td>
@@ -160,6 +158,8 @@ const Users = () => {
                     {(state.users.length === 0 && !state.loading) && <tr><td colSpan="5">No records found</td></tr>}
                 </Table>
             </Card>
+
+            <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
 
             <Modal target="addUser" title="Add User">
                 <UserCreate loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
