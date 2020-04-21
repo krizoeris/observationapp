@@ -78,13 +78,24 @@ const Users = () => {
 
     const handleFilter = (e, name) => {
         let all = (e.value === "All" && name === "type") ? true : false
-        setState({
-            ...state,
-            filter: {
-                ...state.filter,
-                [name]: (e.value.length === 0 || all) ? false : e.value
-            }
-        })
+        if(name !== 'page') {
+            setState({
+                ...state,
+                filter: {
+                    ...state.filter,
+                    page: 1,
+                    [name]: (e.value.length === 0 || all) ? false : e.value
+                }
+            })
+        } else {
+            setState({
+                ...state,
+                filter: {
+                    ...state.filter,
+                    [name]: (e.value.length === 0 || all) ? false : e.value
+                }
+            })
+        }
     }
 
     let filter = state.filter
@@ -125,6 +136,8 @@ const Users = () => {
                 <button className="btn btn-success ml-2 mt-2" data-toggle="modal" data-target="#addUser">Add New User</button>
             </Header>
 
+            <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
+            
             <Card class="shadow-sm border-0 mb-2" classBody="p-0">
                 <Table class="table-sm m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
                     <tr class="bg-light">
@@ -159,14 +172,12 @@ const Users = () => {
                 </Table>
             </Card>
 
-            <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
-
             <Modal target="addUser" title="Add User">
                 <UserCreate loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
             </Modal>
 
             <Modal target="editUser" title="Edit User">
-                {opState.edit.length !== 0 && <UserEdit user={opState.edit} /> }
+                {opState.edit.length !== 0 && <UserEdit user={opState.edit} loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} /> }
             </Modal>
         </div>
     )
