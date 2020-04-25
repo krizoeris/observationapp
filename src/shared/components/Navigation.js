@@ -1,64 +1,77 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHome, faUser, faBook, faFile, faList } from '@fortawesome/free-solid-svg-icons'
+import {
+    Collapse,
+    Navbar,
+    NavbarToggler,
+    NavbarBrand,
+    Nav,
+    NavItem,
+    UncontrolledDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem
+} from 'reactstrap';
+
 import AppContext from '../../AppContext'
 
 const Navigation = () => {
-
-    //Global State
+    // Global State
     const [globalState, setGlobalState] = useContext(AppContext)
+    // Local State
+    const [collapsed, setCollapsed] = useState(true);
+
+    const toggleNavbar = () => setCollapsed(!collapsed);
 
     let userType = globalState.userType
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark main-nav shadow-sm">
-            <div className="container">
-                <a className="navbar-brand" href="#">Observation App</a>
-                
-                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
+        <Navbar className="main-nav shadow-sm" color="dark" dark expand="lg">
+            <NavbarBrand className="navbar-brand" href="#">Observation App</NavbarBrand>
+            <NavbarToggler onClick={toggleNavbar} className="mr-2" />
+            <Collapse isOpen={!collapsed} navbar>
+                <Nav className="mx-auto" navbar>
+                    <NavItem className="p-1">
+                        <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">
+                            <FontAwesomeIcon icon={faHome} /> Home
+                        </NavLink>
+                    </NavItem>
+                    <NavItem className="p-1">
+                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/users">
+                            <FontAwesomeIcon icon={faUser} /> Users
+                        </NavLink>
+                    </NavItem>
+                    <NavItem className="p-1">
+                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/subjects">
+                            <FontAwesomeIcon icon={faBook} /> Subjects
+                        </NavLink>
+                    </NavItem>
+                    <NavItem className="p-1">
+                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/grades">
+                            <FontAwesomeIcon icon={faFile} /> Grades
+                        </NavLink>
+                    </NavItem>
+                    <NavItem className="p-1">
+                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/forms">
+                            <FontAwesomeIcon icon={faList} /> Forms
+                        </NavLink>
+                    </NavItem>
+                </Nav>
 
-                <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav mx-auto">
-                        <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">
-                                <i class="fas fa-home"></i> Home
-                            </NavLink>
-                        </li>
-                        <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/users">
-                                <i class="fas fa-user"></i> Users
-                            </NavLink>
-                        </li>
-                        <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/subjects">
-                                <i class="fas fa-book"></i> Subjects
-                            </NavLink>
-                        </li>
-                        <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/grades">
-                                <i class="fas fa-file"></i> Grades
-                            </NavLink>
-                        </li>
-                        <li className="nav-item p-1">
-                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/forms">
-                                <i class="fas fa-list"></i> Forms
-                            </NavLink>
-                        </li>
-                    </ul>
-                    <ul className="navbar-nav">
-                        <li className="nav-item dropdown p-1">
-                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <Nav navbar>
+                    <UncontrolledDropdown className="p-1" nav inNavbar>
+                        <DropdownToggle nav caret>
                             {userType}
-                            </a>
-                            <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a className="dropdown-item" href="#">Logout</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+                        </DropdownToggle>
+                        <DropdownMenu right>
+                            <DropdownItem>Logout</DropdownItem>
+                        </DropdownMenu>
+                    </UncontrolledDropdown>
+                </Nav>
+            </Collapse>
+        </Navbar>
     )
 }
 
