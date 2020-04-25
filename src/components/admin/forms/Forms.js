@@ -1,9 +1,11 @@
+// Dependencies
 import React from 'react'
-import Header from '../components/Header'
-import Card from '../components/Card'
-import Table from '../components/Table'
-import Tab from '../components/Tab'
-import TabPane from '../components/TabPane'
+
+// Shared
+import Header from '../../../shared/components/Header'
+import Table from '../../../shared/components/Table'
+import Tab from '../../../shared/components/Tab'
+import TabPane from '../../../shared/components/TabPane'
 
 const Forms = () => {
     const ratings = [

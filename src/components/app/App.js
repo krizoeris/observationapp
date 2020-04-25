@@ -1,20 +1,22 @@
+// Dependecies
 import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route} from 'react-router-dom'
-import AppContext from './AppContext';
+
+// Local 
+import AppContext from '../../AppContext';
 import './App.css';
 
-import Navigation from './components/Navigation';
-import Home from './Home';
+// Shared
+import Navigation from '../../shared/components/Navigation';
 
-// Admin Permission
-import Users from './Admin/Users';
-import Subjects from './Admin/Subjects';
-import Grades from './Admin/Grades';
-import Forms from './Admin/Forms';
-
+// Admin Pages
+import Home from '../admin/Home';
+import Users from '../admin/users/Users';
+import Subjects from '../admin/subjects/Subjects';
+import Grades from '../admin/grades/Grades';
+import Forms from '../admin/forms/Forms';
 
 function App() {
-
   // GlobalState
   const [globalState, setGlobalState] = useState({
     userType: 'Admin'

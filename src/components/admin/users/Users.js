@@ -1,15 +1,19 @@
+// Dependencies
 import React, { useState, useEffect } from 'react'
-import Header from '../components/Header'
-import Card from '../components/Card'
-import Table from '../components/Table'
-import Modal from '../components/Modal'
-import Pagination from '../components/Pagination'
-import ActionButtonOption from '../components/ActionButtonOption'
-import SelectDropdown from '../components/SelectDropdown'
-import { ReactComponent as LoadingAnimation} from '../components/loading.svg'
 
-import UserCreate from './components/UserCreate'
-import UserEdit from './components/UserEdit'
+// Shared
+import Header from '../../../shared/components/Header'
+import Card from '../../../shared/components/Card'
+import Table from '../../../shared/components/Table'
+import Modal from '../../../shared/components/Modal'
+import Pagination from '../../../shared/components/Pagination'
+import ActionButtonOption from '../../../shared/components/ActionButtonOption'
+import SelectDropdown from '../../../shared/components/SelectDropdown'
+import { ReactComponent as LoadingAnimation} from '../../../shared/images/loading.svg'
+
+// Local
+import UserCreate from './UserCreate'
+import UserEdit from './UserEdit'
 
 const firstLetterCaps = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);

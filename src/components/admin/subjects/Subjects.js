@@ -1,8 +1,11 @@
+// Dependencies
 import React, { Component } from 'react'
-import Header from '../components/Header'
-import Card from '../components/Card'
-import Table from '../components/Table'
-import ActionButtonOption from '../components/ActionButtonOption'
+
+// Shared
+import Header from '../../../shared/components/Header'
+import Card from '../../../shared/components/Card'
+import Table from '../../../shared/components/Table'
+import ActionButtonOption from '../../../shared/components/ActionButtonOption'
 
 const Subjects = () => {
     const subjects = [
