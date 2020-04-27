@@ -2,26 +2,12 @@ body {
     background: #f5f3f2;
 }
 
-.main-nav {
-    background: #2653a7 !important;
-    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
-}
-
-.main-nav .active {
-    background: #2f61be !important;
-    border-radius: 5%;
-}
-
-.home.active {
-    background: #2653a7 !important;
-}
-
 .bg-main {
     background: #2653a7 !important;
     color: #fff;
 }
 
-input[type=checkbox].checkTable
+.checkTable
 {
   /* Double-sized Checkboxes */
   -ms-transform: scale(1.2); /* IE */
@@ -32,8 +18,13 @@ input[type=checkbox].checkTable
   margin-left: 5px;
 }
 
-input[type=checkbox].table-top {
+.table-top {
     margin-top: 14px;
+}
+
+.action {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    font-weight: bold;
 }
 
 /* width */

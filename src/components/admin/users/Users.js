@@ -1,23 +1,24 @@
 // Dependencies
 import React, { useState, useEffect } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTasks, faPencilAlt, faTrash, faArchive } from '@fortawesome/free-solid-svg-icons'
+import { 
+    Card, CardBody, Container, Button,
+    Input, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem
+} from 'reactstrap';
 
 // Shared
 import Header from '../../../shared/components/Header'
-import Card from '../../../shared/components/Card'
 import Table from '../../../shared/components/Table'
-import Modal from '../../../shared/components/Modal'
-import Pagination from '../../../shared/components/Pagination'
-import ActionButtonOption from '../../../shared/components/ActionButtonOption'
-import SelectDropdown from '../../../shared/components/SelectDropdown'
-import { ReactComponent as LoadingAnimation} from '../../../shared/images/loading.svg'
+import Modal from '../../../shared/components/ModalAction'
+import Pagination from '../../../shared/components/PaginationNav'
+import { ReactComponent as LoadingAnimation} from '../../../shared/images/spinGray.svg'
 
 // Local
 import UserCreate from './UserCreate'
 import UserEdit from './UserEdit'
 
-const firstLetterCaps = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+const firstLetterCaps = (string) => {return string.charAt(0).toUpperCase() + string.slice(1)}
 
 const sliceAndCapsArr = (array) => {
     let string
@@ -44,6 +45,14 @@ const Users = () => {
         edit: [],
         delete: []
     })
+
+    const [dropdownOpen, setOpen] = useState(false)
+    const [modalAdd, setModalAdd] = useState(false);
+    const [modalEdit, setModalEdit] = useState(false);
+
+    const toggleAdd = () => setModalAdd(!modalAdd);
+    const toggleEdit = () => setModalEdit(!modalEdit);
+    const toggle = (id) => (dropdownOpen === id) ? setOpen(false) : setOpen(id) 
 
     const getUsersData = async (page, limit, fname, lname, type) => {
         let url = `${process.env.REACT_APP_BACKEND_URL}/users`
@@ -126,63 +135,79 @@ const Users = () => {
     }, [filter.limit])
     
     return (
-        <div className="Users container mt-4 mb-4">
-            <Header title="Users">
-                <div class="btn-group btn-group-toggle mt-2" data-toggle="buttons">
-                    <label class="btn bg-main">
-                        <input type="radio" name="options" id="option1" /> Import
-                    </label>
-                    <label class="btn bg-main">
-                        <input type="radio" name="options" id="option2" /> Export
-                    </label>
-                </div>
-
-                <button className="btn btn-success ml-2 mt-2" data-toggle="modal" data-target="#addUser">Add New User</button>
-            </Header>
-
-            <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
-            
-            <Card class="shadow-sm border-0 mb-2" classBody="p-0">
-                <Table class="table-sm m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
-                    <tr class="bg-light">
-                        <td><input type="checkbox" class="checkTable table-top"/></td>
-                        <td width="35%"><input type="text" class="form-control" placeholder="Filter first name" onChange={(e) => { handleFilter(e.target, 'fname')}} /></td>
-                        <td width="35%"><input type="text" class="form-control" placeholder="Filter last name" onChange={(e) => { handleFilter(e.target, 'lname')}} /></td>
-                        <td width="30%"><SelectDropdown handleFilter={handleFilter} filterName={'type'} options={['All', 'Teacher', 'Observer', 'Facilitator', 'Admin']} /></td>
-                        <td style={{minWidth: '64px'}}></td>
-                    </tr>
-                    {!state.loading && 
-                        state.users.map(user => 
-                        <tr>
-                            <td class="pt-3"><input type="checkbox" class="checkTable" /></td>
-                            <td class="pt-3">{user.first_name}</td>
-                            <td class="pt-3">{user.last_name}</td>
-                            <td class="pt-3">{sliceAndCapsArr(user.type)}</td>
-                            <td>
-                                <ActionButtonOption>
-                                    <button class="dropdown-item" data-toggle="modal" data-target="#editUser" onClick={() => handleEdit(user)}>Edit</button>
-                                    <a class="dropdown-item" href="#">Delete</a>
-                                    <a class="dropdown-item" href="#">Archive</a>
-                                </ActionButtonOption>
+        <div className="Users">
+            <Container className="mt-4 mb-4">
+                <Header title="Users">
+                    <Button color="success" className="ml-2 mt-2" onClick={toggleAdd}>Add New User</Button>
+                </Header>
+                
+                <Card className="shadow-sm border-0 mb-2">
+                    <CardBody className="p-0">
+                        <Table class="m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
+                        <tr class="bg-light">
+                            <td style={{minWidth: '30px'}}>
+                                <Input type="checkbox" className="checkTable table-top"/>
                             </td>
+                            <td width="35%">
+                                <Input type="text" placeholder="Filter first name" onChange={(e) => { handleFilter(e.target, 'fname')}} />
+                            </td>
+                            <td width="35%">
+                                <Input type="text" placeholder="Filter last name" onChange={(e) => { handleFilter(e.target, 'lname')}} />
+                            </td>
+                            <td width="30%">
+                                <Input type="select" onChange={e => handleFilter(e.target, 'type')}>
+                                    <option>All</option>
+                                    <option>Teacher</option>
+                                    <option>Observer</option>
+                                    <option>Facilitator</option>
+                                    <option>Admin</option>
+                                </Input>
+                            </td>
+                            <td style={{minWidth: '115.5px'}}></td>
                         </tr>
-                    )}
-                    {state.loading && 
-                        <tr>
-                            <td colSpan="5"><center><LoadingAnimation style={{margin: '0 auto', height: 55, width: 55 }} /></center></td>
-                        </tr>
-                    }
-                    {(state.users.length === 0 && !state.loading) && <tr><td colSpan="5">No records found</td></tr>}
-                </Table>
-            </Card>
+                        {!state.loading && 
+                            state.users.map(user => 
+                            <tr>
+                                <td class="pt-3"><Input type="checkbox" className="checkTable" /></td>
+                                <td class="pt-3">{user.first_name}</td>
+                                <td class="pt-3">{user.last_name}</td>
+                                <td class="pt-3">{sliceAndCapsArr(user.type)}</td>
+                                <td>
+                                    <ButtonDropdown isOpen={dropdownOpen === user.id} toggle={() => toggle(user.id)}>
+                                        <DropdownToggle className="btn-light btn-sm action" caret>
+                                            <FontAwesomeIcon icon={faTasks} /> Action
+                                        </DropdownToggle>
+                                        <DropdownMenu right>
+                                            {/*  onClick={() => handleEdit(user)} */}
+                                            <DropdownItem data-toggle="modal" data-target="#editUser" onClick={() => {toggleEdit(); handleEdit(user);} }><FontAwesomeIcon icon={faPencilAlt} /> Edit</DropdownItem>
+                                            <DropdownItem><FontAwesomeIcon icon={faTrash} /> Delete</DropdownItem>
+                                            <DropdownItem divider />
+                                            <DropdownItem><FontAwesomeIcon icon={faArchive} /> Archive</DropdownItem>
+                                        </DropdownMenu>
+                                    </ButtonDropdown>
+                                </td>
+                            </tr>
+                        )}
+                        {state.loading && 
+                            <tr>
+                                <td height="300" colSpan="5"><center><LoadingAnimation style={{margin: '150 auto', height: 55, width: 55 }} /></center></td>
+                            </tr>
+                        }
+                        {(state.users.length === 0 && !state.loading) && <tr><td colSpan="5">No records found</td></tr>}
+                        </Table>
+                    </CardBody>
+                </Card>
 
-            <Modal target="addUser" title="Add User">
-                <UserCreate loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
-            </Modal>
+                <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
 
-            <Modal target="editUser" title="Edit User">
-                {opState.edit.length !== 0 && <UserEdit user={opState.edit} loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} /> }
-            </Modal>
+                <Modal modal={modalAdd} toggle={toggleAdd} title="Add User">
+                    <UserCreate action={'add'} toggle={toggleAdd} loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
+                </Modal>
+
+                <Modal modal={modalEdit} toggle={toggleEdit} title="Edit User">
+                    <UserEdit user={opState.edit} loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
+                </Modal>
+            </Container>
         </div>
     )
 }

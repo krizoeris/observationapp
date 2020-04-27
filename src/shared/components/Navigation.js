@@ -1,20 +1,16 @@
+// Dependencies
 import React, { useContext, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faUser, faBook, faFile, faList } from '@fortawesome/free-solid-svg-icons'
 import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem
+    Collapse, Navbar, NavbarToggler,
+    NavbarBrand, Nav, NavItem, UncontrolledDropdown,
+    DropdownToggle, DropdownMenu, DropdownItem
 } from 'reactstrap';
 
+// Local
+import './Navigation.css';
 import AppContext from '../../AppContext'
 
 const Navigation = () => {

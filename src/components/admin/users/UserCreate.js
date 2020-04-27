@@ -1,27 +1,34 @@
 // Dependencies
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
+import {
+    Button, Form, FormGroup, Label, 
+    Input, FormFeedback, Col, Row 
+} from 'reactstrap';
 
 // Shared
 import { ReactComponent as LoadingAnimation} from '../../../shared/images/loadingButton.svg'
 
-const UserCreate = ({loadUser}) => {
-    const [state, setState] = useState({
-        loading: true,
-        success: false,
-        subjects: [],
+const UserCreate = ({loadUser, toggle, action}) => {
+    const [loading, setLoading] = useState(false)
+    const [subjects, setSubjects] = useState([])
+    const [inputs, setInputs] = useState({
+        fnameInput: '', 
+        lnameInput: '', 
+        emailInput: '', 
+        passwordInput: '', 
+        inviteInput: '',
         rolesInput: [],
         subjectsInput: [],
-        error: {
-            fnameError: "", 
-            lnameError: "", 
-            emailError: "", 
-            passwordError: "", 
-            rolesError: "", 
-            subjectsError: ""
-        }
     })
-
+    const [errors, setErrors] = useState({
+        fnameError: "", 
+        lnameError: "", 
+        emailError: "", 
+        passwordError: "", 
+        rolesError: "", 
+        subjectsError: ""
+    })
     const roles = [
         { value: 'admin', label: 'Admin' },
         { value: 'observer', label: 'Observer' },
@@ -29,66 +36,43 @@ const UserCreate = ({loadUser}) => {
         { value: 'teacher', label: 'Teacher' }
     ]
 
-    let subjects =[]
-
-    let fnameInput, lnameInput, emailInput, passwordInput, inviteInput
-    let rolesInput = state.rolesInput
-    let subjectsInput = state.subjectsInput
-
-    const getSubjectsData = async () => {
-        let url = `${process.env.REACT_APP_BACKEND_URL}/subjects`
-        let response = await fetch(url)
-        response = await response.json()
-
-        response = response.data
-
-        setState({
-            ...state,
-            loading: false,
-            subjects: response
-        })
-    }
-
     const validate = () => {
         let fnameError, lnameError, emailError, passwordError, rolesError, subjectsError = ""
 
-        if(!fnameInput.value) {
+        if(!inputs.fnameInput) {
             fnameError = "First Name must not be empty"
         }
         
-        if(!lnameInput.value) {
+        if(!inputs.lnameInput) {
             lnameError = "Last Name must not be empty"
         }
         
-        if(!emailInput.value) {
+        if(!inputs.emailInput) {
             emailError = "Email must not be empty"
         }
         
-        if(!passwordInput.value) {
+        if(!inputs.passwordInput) {
             passwordError = "Please enter password"
-        } else if(passwordInput.value.length <= 8) {
+        } else if(inputs.passwordInput.length <= 8) {
             passwordError = "Password must be 8 characters"
         }
         
-        if(!rolesInput || rolesInput.length <= 0) {
+        if(!inputs.rolesInput || inputs.rolesInput.length <= 0) {
             rolesError = "Roles must contain one row"
         }
         
-        if(!subjectsInput || subjectsInput.length <= 0) {
+        if(!inputs.subjectsInput || inputs.subjectsInput.length <= 0) {
             subjectsError = "Subjects must contain one subject"
         }
 
         if(fnameError || lnameError || emailError || passwordError || rolesError || subjectsError ) {
-            setState({
-                ...state,
-                error: {
-                    fnameError: fnameError,
-                    lnameError: lnameError,
-                    emailError: emailError,
-                    passwordError: passwordError,
-                    rolesError: rolesError,
-                    subjectsError: subjectsError
-                }
+            setErrors({
+                fnameError: fnameError,
+                lnameError: lnameError,
+                emailError: emailError,
+                passwordError: passwordError,
+                rolesError: rolesError,
+                subjectsError: subjectsError
             })
             return false
         } else {
@@ -96,43 +80,54 @@ const UserCreate = ({loadUser}) => {
         }
     }
 
-    const handleChangeRoles = newValue => { setState({ ...state, rolesInput: newValue })}
-    const handleChangeSubjects = newValue => { setState({ ...state, subjectsInput: newValue })}
+    const getSubjectsData = async () => {
+        let url = `${process.env.REACT_APP_BACKEND_URL}/subjects`
+        let response = await fetch(url)
+        response = await response.json()
+        response = response.data
 
-    const handleCreateUser = async e => {
-        e.preventDefault()
-        setState({...state, loading: true})
+        let subjects = []
+
+        response.map(data => {
+            subjects.push({
+                value: data.id,
+                label: data.name
+            })
+        })
+
+        setSubjects(subjects)
+    }
+
+    const postUserData = async () => {
+        setLoading(true)
         if(validate()) {
+
             let data = {
-                first_name: fnameInput.value,
-                last_name: lnameInput.value,
-                email: emailInput.value,
-                password: passwordInput.value,
+                first_name: inputs.fnameInput,
+                last_name: inputs.lnameInput,
+                email: inputs.emailInput,
+                password: inputs.passwordInput,
                 type: []
             }
     
-            rolesInput.map(role => {
+            inputs.rolesInput.map(role => {
                 data.type = [...data.type, role.value]
             })
-    
-            //console.log(data)
-            //console.log(subjects)
-    
-            const submitUser = await fetch(process.env.REACT_APP_BACKEND_URL+'/users', {
+
+            const createUser = await fetch(process.env.REACT_APP_BACKEND_URL+'/users', {
                 method: 'POST',
                 headers: {"Content-type": "application/json"},
                 body: JSON.stringify(data)
             })
             
-            const response = await submitUser.json()
+            const response = await createUser.json()
             const userId = response.data.id
             const userType = response.data.type
     
-            if(userId && subjectsInput.length > 0) {
-                
+            if(userId && inputs.subjectsInput.length > 0) {
                 let subjects = []
     
-                subjectsInput.map(subject => {
+                inputs.subjectsInput.map(subject => {
                     subjects.push({
                         user_id: userId,
                         subject_id: subject.value,
@@ -140,126 +135,99 @@ const UserCreate = ({loadUser}) => {
                     })
                 })
     
-                const submitUserSubject = await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
+                await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
                     method: 'POST',
                     headers: {"Content-type": "application/json"},
                     body: JSON.stringify(subjects)
                 })
-                
-                const responseSubjectUser = await submitUserSubject.json()
             }
 
            if(response.success) {
                 loadUser()
-                setState({
-                    ...state,
-                    success: true,
-                    loading: false,
-                    error: {
-                        fnameError: '',
-                        lnameError: '',
-                        emailError: '',
-                        passwordError: '',
-                        rolesError: '',
-                        subjectsError: ''
-                    },
-                    rolesInput: [],
-                    subjectsInput: []
-                })
-
-                return true
+                toggle()
+                setLoading(false)
            }
         }
     }
 
-    const handleClear = () => {
+    const handleSubmit = e => {
+        e.preventDefault()
 
-        setState({
-            ...state,
-            success: false
-        })
-        
-        fnameInput = ''
-        lnameInput = '' 
-        emailInput = '' 
-        passwordInput = ''
-        inviteInput = ''
+        if(action === 'add') {
+            postUserData()
+        }
     }
 
     const selectStyleInValid = { control: styles => ({...styles, borderColor: 'red'}) }
 
-    if(subjects.length === 0) {
-        state.subjects.map(data => {
-            subjects.push({
-                value: data.id,
-                label: data.name
-            })
-        })
-    }
-
     useEffect(()=>{
         getSubjectsData()
-    }, [])
+    }, [subjects])
 
-    
     return (
         <div>
-            {(state.success) ?
-                <div className="text-center">
-                    <h4 className="text-success mb-4">Successfully Added!</h4>
-                    <button className="btn btn-danger" data-dismiss="modal" aria-label="Close" onClick={handleClear}>Done</button>
+            <Form onSubmit={handleSubmit}>
+                <Row form>
+                    <Col md={6}>
+                        <FormGroup>
+                            <Label>First name</Label>
+                            <Input  type="text" placeholder="First name" 
+                                    onChange={e => setInputs({...inputs, fnameInput: e.target.value})} 
+                                    invalid={(!errors.fnameError) ? false : true} />
+                            <FormFeedback>{errors.fnameError}</FormFeedback>
+                        </FormGroup>
+                    </Col>
+                    <Col md={6}>
+                        <FormGroup>
+                            <Label>Last name</Label>
+                            <Input  type="text" placeholder="Last name" 
+                                    onChange={e => setInputs({...inputs, lnameInput: e.target.value})} 
+                                    invalid={(!errors.lnameError) ? false : true} />
+                            <FormFeedback>{errors.lnameError}</FormFeedback>
+                        </FormGroup>
+                    </Col>
+                </Row>
+                <FormGroup>
+                    <Label>Email address</Label>
+                    <Input  type="email" placeholder="Email" 
+                            onChange={e => setInputs({...inputs, emailInput: e.target.value})} 
+                            invalid={(!errors.emailError) ? false : true} />
+                    <FormFeedback>{errors.emailError}</FormFeedback>
+                </FormGroup>
+                <FormGroup>
+                    <Label>Password</Label>
+                    <Input  type="password" placeholder="password" 
+                            onChange={e => setInputs({...inputs, passwordInput: e.target.value})} 
+                            invalid={(!errors.passwordError) ? false : true} />
+                    <FormFeedback>{errors.passwordError}</FormFeedback>
+                </FormGroup>
+                <FormGroup>
+                    <Label>Roles</Label>
+                    <Select value={inputs.rolesInput} options={roles} 
+                            styles={errors.rolesError && selectStyleInValid} 
+                            isMulti onChange={e => setInputs({ ...inputs, rolesInput: e })} />
+                    <small className="text-danger">{errors.rolesError}</small>
+                </FormGroup>
+                <FormGroup>
+                    <Label>Subjects</Label>
+                    <Select value={inputs.subjectsInput} options={subjects} 
+                            styles={errors.subjectsError && selectStyleInValid} 
+                            isMulti onChange={e => setInputs({ ...inputs, subjectsInput: e })} />
+                    <small className="text-danger">{errors.subjectsError}</small>
+                </FormGroup>
+                <FormGroup className="custom-control custom-checkbox" check>
+                    <Input  type="checkbox" id="inviteUser" className="custom-control-input" 
+                            onChange={e => setInputs({...inputs, inviteInput: e.target.value})} />
+                    <Label for="inviteUser" className="custom-control-label" check>Invite User</Label>
+                </FormGroup>
+                <div className="d-flex justify-content-between mt-2">
+                    {(loading) 
+                        ? <Button type="submit" color="primary" style={{width: 127.55}} disabled><LoadingAnimation style={{margin: '0 auto', height: 20, width: '100%'}} /></Button>
+                        : <Button type="submit" color="primary">Add New User</Button>
+                    }
+                    <Button onClick={toggle} color="secondary">Cancel</Button>
                 </div>
-            :
-                <form onSubmit={handleCreateUser}>
-                    <div className="form-group">
-                        <div className="form-row">
-                            <div className="col">
-                                <label>First Name</label>
-                                <input type="text" className={(!state.error.fnameError) ? `form-control` : `form-control border border-danger`} placeholder="First name" ref={e => fnameInput = e}/>
-                                <small className="text-danger bold">{state.error.fnameError}</small>
-                            </div>
-                            <div className="col">
-                                <label>Last Name</label>
-                                <input type="text" className={(!state.error.lnameError) ? `form-control` : `form-control border border-danger`} placeholder="Last name" ref={e => lnameInput = e}/>
-                                <small className="text-danger bold">{state.error.lnameError}</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label>Email address</label>
-                        <input type="email" className={(!state.error.emailError) ? `form-control` : `form-control border border-danger`} placeholder="Enter email" ref={e => emailInput = e}/>
-                        <small className="text-danger bold">{state.error.emailError}</small>
-                    </div>
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input type="password" className={(!state.error.passwordError) ? `form-control` : `form-control border border-danger`} placeholder="Password" ref={e => passwordInput = e}/>
-                        <small className="text-danger bold">{state.error.passwordError}</small>
-                    </div>
-                    <div className="form-group">
-                        <label>Roles</label>
-                        <Select value={state.rolesInput} options={roles} styles={state.error.rolesError && selectStyleInValid} isMulti onChange={handleChangeRoles} />
-                        <small className="text-danger bold">{state.error.rolesError}</small>
-                    </div>
-                    <div className="form-group">
-                        <label>Subjects</label>
-                        <Select value={state.subjectsInput} options={subjects} styles={state.error.subjectsError && selectStyleInValid} isMulti onChange={handleChangeSubjects} />
-                        <small className="text-danger bold">{state.error.subjectsError}</small>
-                    </div>
-                    <div className="form-group">
-                        <div className="custom-control custom-checkbox">
-                            <input type="checkbox" id="inviteUser" className="custom-control-input" ref={e => inviteInput = e} />
-                            <label className="custom-control-label" for="inviteUser" >Invite User</label>
-                        </div>
-                    </div>
-                    <div className="d-flex justify-content-between">
-                        {(state.loading) 
-                            ? <button type="submit" className="btn btn-primary" style={{width: 127.55}} disabled><LoadingAnimation style={{margin: '0 auto', height: 20, width: '100%'}} /></button>
-                            : <button type="submit" className="btn btn-primary">Add New User</button>
-                        }
-                        <button className="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close">Cancel</button>
-                    </div>
-                </form>
-            }
+            </Form>
         </div>
     )
     
