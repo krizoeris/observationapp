@@ -15,8 +15,7 @@ import Pagination from '../../../shared/components/PaginationNav'
 import { ReactComponent as LoadingAnimation} from '../../../shared/images/spinGray.svg'
 
 // Local
-import UserCreate from './UserCreate'
-import UserEdit from './UserEdit'
+import UserForm from './UserForm'
 
 const firstLetterCaps = (string) => {return string.charAt(0).toUpperCase() + string.slice(1)}
 
@@ -41,18 +40,23 @@ const Users = () => {
         }
     })
 
-    const [opState, setOpState] = useState({
-        edit: [],
-        delete: []
+    const [dropdownOpen, setDropdownOpen] = useState(false)
+    const [modal, setModalOpen] = useState({
+        open: false,
+        title: '',
+        action: '',
+        id: 0
     })
 
-    const [dropdownOpen, setOpen] = useState(false)
-    const [modalAdd, setModalAdd] = useState(false);
-    const [modalEdit, setModalEdit] = useState(false);
-
-    const toggleAdd = () => setModalAdd(!modalAdd);
-    const toggleEdit = () => setModalEdit(!modalEdit);
-    const toggle = (id) => (dropdownOpen === id) ? setOpen(false) : setOpen(id) 
+    const toggleModal = (title = '', action = '', id = 0) => {
+        setModalOpen({
+            open: !modal.open,
+            title: title,
+            action: action,
+            id: id
+        })
+    }
+    const toggleDropdown = (id) => (dropdownOpen === id) ? setDropdownOpen(false) : setDropdownOpen(id) 
 
     const getUsersData = async (page, limit, fname, lname, type) => {
         let url = `${process.env.REACT_APP_BACKEND_URL}/users`
@@ -62,7 +66,6 @@ const Users = () => {
         if(fname){ url = `${url}&fname=${fname}` }
         if(lname){ url = `${url}&lname=${lname}` }
         if(type){ url = `${url}&type=${type}` }
-
 
         let response = await fetch(url)
         response = await response.json()
@@ -80,13 +83,6 @@ const Users = () => {
                 loading: false
             })
         }
-    }
-
-    const handleEdit = (user) => {
-        setOpState({
-            ...opState,
-            edit: user
-        })
     }
 
     const handleFilter = (e, name) => {
@@ -138,7 +134,7 @@ const Users = () => {
         <div className="Users">
             <Container className="mt-4 mb-4">
                 <Header title="Users">
-                    <Button color="success" className="ml-2 mt-2" onClick={toggleAdd}>Add New User</Button>
+                    <Button color="success" className="ml-2 mt-2" onClick={() => toggleModal('Add New User', 'add')}>Add New User</Button>
                 </Header>
                 
                 <Card className="shadow-sm border-0 mb-2">
@@ -173,16 +169,21 @@ const Users = () => {
                                 <td class="pt-3">{user.last_name}</td>
                                 <td class="pt-3">{sliceAndCapsArr(user.type)}</td>
                                 <td>
-                                    <ButtonDropdown isOpen={dropdownOpen === user.id} toggle={() => toggle(user.id)}>
+                                    <ButtonDropdown isOpen={dropdownOpen === user.id} toggle={() => toggleDropdown(user.id)}>
                                         <DropdownToggle className="btn-light btn-sm action" caret>
                                             <FontAwesomeIcon icon={faTasks} /> Action
                                         </DropdownToggle>
                                         <DropdownMenu right>
-                                            {/*  onClick={() => handleEdit(user)} */}
-                                            <DropdownItem data-toggle="modal" data-target="#editUser" onClick={() => {toggleEdit(); handleEdit(user);} }><FontAwesomeIcon icon={faPencilAlt} /> Edit</DropdownItem>
-                                            <DropdownItem><FontAwesomeIcon icon={faTrash} /> Delete</DropdownItem>
+                                            <DropdownItem onClick={() => {toggleModal('Edit User', 'edit', user.id)} }>
+                                                <FontAwesomeIcon icon={faPencilAlt} /> Edit
+                                            </DropdownItem>
+                                            <DropdownItem>
+                                                <FontAwesomeIcon icon={faTrash} /> Delete
+                                            </DropdownItem>
                                             <DropdownItem divider />
-                                            <DropdownItem><FontAwesomeIcon icon={faArchive} /> Archive</DropdownItem>
+                                            <DropdownItem>
+                                                <FontAwesomeIcon icon={faArchive} /> Archive
+                                            </DropdownItem>
                                         </DropdownMenu>
                                     </ButtonDropdown>
                                 </td>
@@ -200,12 +201,9 @@ const Users = () => {
 
                 <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
 
-                <Modal modal={modalAdd} toggle={toggleAdd} title="Add User">
-                    <UserCreate action={'add'} toggle={toggleAdd} loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
-                </Modal>
-
-                <Modal modal={modalEdit} toggle={toggleEdit} title="Edit User">
-                    <UserEdit user={opState.edit} loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
+                <Modal modal={modal.open} toggle={toggleModal} title={modal.title}>
+                    <UserForm   action={modal.action} toggle={toggleModal} id={modal.id}
+                                loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
                 </Modal>
             </Container>
         </div>

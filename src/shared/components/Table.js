@@ -4,7 +4,7 @@ import React from 'react'
 
 const Table = (prop) => {
     return (
-        <table class={(prop.class) ? 'table '+prop.class : 'table'}>
+        <table className={(prop.class) ? 'table '+prop.class : 'table'}>
             {prop.columns &&
             <thead>
                 <tr>
