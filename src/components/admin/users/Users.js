@@ -17,6 +17,7 @@ import { ReactComponent as LoadingAnimation} from '../../../shared/images/spinGr
 
 // Local
 import UserForm from './UserForm'
+import UserDelete from './UserDelete'
 
 const firstLetterCaps = (string) => {return string.charAt(0).toUpperCase() + string.slice(1)}
 
@@ -42,6 +43,12 @@ const Users = () => {
     })
 
     const [dropdownOpen, setDropdownOpen] = useState(false)
+    const [modalDelete, setModalDelete] = useState({
+        open: false,
+        id: 0,
+        fname: '',
+        lname: ''
+    })
     const [modal, setModalOpen] = useState({
         open: false,
         title: '',
@@ -49,6 +56,15 @@ const Users = () => {
         id: 0
     })
 
+    const toggleDropdown = (id) => (dropdownOpen === id) ? setDropdownOpen(false) : setDropdownOpen(id) 
+    const toggleModalDelete = (id = 0, fname = '', lname = '') => {
+        setModalDelete({
+            open: !modalDelete.open,
+            id: id,
+            fname: fname,
+            lname: lname
+        })
+    }
     const toggleModal = (title = '', action = '', id = 0) => {
         setModalOpen({
             open: !modal.open,
@@ -57,7 +73,6 @@ const Users = () => {
             id: id
         })
     }
-    const toggleDropdown = (id) => (dropdownOpen === id) ? setDropdownOpen(false) : setDropdownOpen(id) 
 
     const getUsersData = async (page, limit, fname, lname, type) => {
         let url = `${process.env.REACT_APP_BACKEND_URL}/users`
@@ -178,7 +193,7 @@ const Users = () => {
                                             <DropdownItem onClick={() => {toggleModal('Edit User', 'edit', user.id)} }>
                                                 <FontAwesomeIcon icon={faPencilAlt} /> Edit
                                             </DropdownItem>
-                                            <DropdownItem>
+                                            <DropdownItem onClick={() => {toggleModalDelete(user.id, user.first_name, user.last_name)} }>
                                                 <FontAwesomeIcon icon={faTrash} /> Delete
                                             </DropdownItem>
                                             <DropdownItem divider />
@@ -201,11 +216,17 @@ const Users = () => {
                 </Card>
 
                 <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
-
+                
                 <Modal modal={modal.open} toggle={toggleModal} title={modal.title}>
                     <UserForm   action={modal.action} toggle={toggleModal} id={modal.id}
                                 loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
                 </Modal>
+
+                <Modal modal={modalDelete.open} toggle={toggleModalDelete} title={'Delete User'}>
+                    <UserDelete toggle={toggleModalDelete} fname={modalDelete.fname} lname={modalDelete.lname} id={modalDelete.id}
+                                loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
+                </Modal>
+
             </Container>
             <NotificationContainer />
         </div>

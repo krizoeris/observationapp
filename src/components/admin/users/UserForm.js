@@ -218,7 +218,7 @@ const UserForm = ({loadUser, toggle, action, id}) => {
             updateSubjectUserData(data)
 
            if(response.success) {
-                NotificationManager.warning(`${data.first_name} ${data.last_name}`, 'Updated Successfully');
+                NotificationManager.success(`${data.first_name} ${data.last_name}`, 'Updated Successfully');
                 setLoading(false)
                 setInputs([])
                 loadUser()
