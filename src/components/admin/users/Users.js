@@ -1,5 +1,6 @@
 // Dependencies
 import React, { useState, useEffect } from 'react'
+import { NotificationContainer } from 'react-notifications';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTasks, faPencilAlt, faTrash, faArchive } from '@fortawesome/free-solid-svg-icons'
 import { 
@@ -206,6 +207,7 @@ const Users = () => {
                                 loadUser={() => getUsersData(filter.page, filter.limit, filter.fname, filter.lname, filter.type)} />
                 </Modal>
             </Container>
+            <NotificationContainer />
         </div>
     )
 }

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import {NotificationManager} from 'react-notifications';
 import Select from 'react-select'
 import {
     Button, Form, FormGroup, Label, 
@@ -137,6 +138,7 @@ const UserForm = ({loadUser, toggle, action, id}) => {
             }
 
            if(response.success) {
+                NotificationManager.success(`${data.first_name} ${data.last_name}`, 'Successfully Added User');
                 setLoading(false)
                 setInputs([])
                 loadUser()
@@ -216,6 +218,7 @@ const UserForm = ({loadUser, toggle, action, id}) => {
             updateSubjectUserData(data)
 
            if(response.success) {
+                NotificationManager.warning(`${data.first_name} ${data.last_name}`, 'Updated Successfully');
                 setLoading(false)
                 setInputs([])
                 loadUser()
