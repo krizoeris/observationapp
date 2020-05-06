@@ -139,8 +139,8 @@ const Subjects = () => {
 
                 <Card className="shadow-sm border-0 mb-2">
                     <CardBody className="p-0">
-                        <Table class="m-0" columns={['', 'Subject', '', '', '', '']}>
-                        <tr class="bg-light">
+                        <Table className="m-0" columns={['', 'Subject', '', '', '', '']}>
+                        <tr className="bg-light">
                             <td style={{minWidth: '42px'}}>
                                 <Input type="checkbox" className="checkTable table-top"/>
                             </td>
@@ -152,11 +152,11 @@ const Subjects = () => {
                         {!state.loading &&
                             state.subjects.map(subject => 
                             <tr>
-                                <td class="pt-3"><input type="checkbox" class="checkTable" /></td>
-                                <td class="pt-3">{subject.name}</td>
-                                <td class="pt-3"><strong>{subject.observer}</strong> Observer</td>
-                                <td class="pt-3"><strong>{subject.facilitator}</strong> Facilitator</td>
-                                <td class="pt-3"><strong>{subject.teachers}</strong> Teacher</td>
+                                <td className="pt-3"><input type="checkbox" className="checkTable" /></td>
+                                <td className="pt-3">{subject.name}</td>
+                                <td className="pt-3"><strong>{subject.observer}</strong> Observer</td>
+                                <td className="pt-3"><strong>{subject.teachers}</strong> Teacher</td>
+                                <td className="pt-3"><strong>{subject.facilitator}</strong> Facilitator</td>
                                 <td>
                                     <ButtonDropdown isOpen={dropdownOpen === subject.id} toggle={() => toggle(subject.id)}>
                                         <DropdownToggle className="btn-light btn-sm action" caret>

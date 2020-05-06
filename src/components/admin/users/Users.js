@@ -155,8 +155,8 @@ const Users = () => {
                 
                 <Card className="shadow-sm border-0 mb-2">
                     <CardBody className="p-0">
-                        <Table class="m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
-                        <tr class="bg-light">
+                        <Table className="m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
+                        <tr className="bg-light">
                             <td style={{minWidth: '30px'}}>
                                 <Input type="checkbox" className="checkTable table-top"/>
                             </td>
@@ -180,10 +180,10 @@ const Users = () => {
                         {!state.loading && 
                             state.users.map(user => 
                             <tr>
-                                <td class="pt-3"><Input type="checkbox" className="checkTable" /></td>
-                                <td class="pt-3">{user.first_name}</td>
-                                <td class="pt-3">{user.last_name}</td>
-                                <td class="pt-3">{sliceAndCapsArr(user.type)}</td>
+                                <td className="pt-3"><Input type="checkbox" className="checkTable" /></td>
+                                <td className="pt-3">{user.first_name}</td>
+                                <td className="pt-3">{user.last_name}</td>
+                                <td className="pt-3">{sliceAndCapsArr(user.type)}</td>
                                 <td>
                                     <ButtonDropdown isOpen={dropdownOpen === user.id} toggle={() => toggleDropdown(user.id)}>
                                         <DropdownToggle className="btn-light btn-sm action" caret>
