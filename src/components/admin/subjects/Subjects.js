@@ -173,7 +173,7 @@ const Subjects = () => {
                             </tr>
                         )}{state.loading && 
                             <tr>
-                                <td height="300" colSpan="5"><center><LoadingAnimation style={{margin: '150 auto', height: 55, width: 55 }} /></center></td>
+                                <td height="300" colSpan="6"><center><LoadingAnimation style={{margin: '150 auto', height: 55, width: 55 }} /></center></td>
                             </tr>
                         }
                         {(state.subjects.length === 0 && !state.loading) && <tr><td colSpan="5">No records found</td></tr>}
@@ -188,7 +188,7 @@ const Subjects = () => {
                                 loadSubjects={() => getSubjectsData(filter.page, filter.limit, filter.name)} />
                 </Modal>
 
-                <Modal modal={modalDelete.open} toggle={toggleModalDelete} title={'Delete Subjects'}>
+                <Modal modal={modalDelete.open} toggle={toggleModalDelete} title={'Delete Subject'}>
                     <SubjectsDelete toggle={toggleModalDelete} name={modalDelete.name} id={modalDelete.id}
                                 loadSubjects={() => getSubjectsData(filter.page, filter.limit, filter.name)} />
                 </Modal>
