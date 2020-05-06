@@ -190,6 +190,7 @@ const Grades = () => {
                                 loadGrades={() => getGradesData(filter.page, filter.limit, filter.name)} />
                 </Modal>
             </Container>
+            <NotificationContainer />
         </div>
     )
 }
