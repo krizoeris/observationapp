@@ -1,14 +1,145 @@
 // Dependencies
-import React from 'react'
-import { Container } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { NotificationContainer } from 'react-notifications';
+import {    
+    ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,
+    TabContent, TabPane, Nav, NavItem, NavLink, Container,
+    Button, Row, Col, Input
+} from 'reactstrap';
+import classnames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { 
+    faTasks, faPencilAlt, faTrash, faSave,
+    faArchive, faFolderOpen, faPlus, faTimes
+} from '@fortawesome/free-solid-svg-icons'
 
 // Shared
 import Header from '../../../shared/components/Header'
 import Table from '../../../shared/components/Table'
-import Tab from '../../../shared/components/Tab'
-import TabPane from '../../../shared/components/TabPane'
+import Modal from '../../../shared/components/ModalAction'
+import Pagination from '../../../shared/components/PaginationNav'
+import { ReactComponent as LoadingAnimation} from '../../../shared/images/spinGray.svg'
+
+// Local
+import FormsForm from './FormsForm'
+import FormsDelete from './FormsDelete'
+import Ratings from './Ratings'
 
 const Forms = () => {
+    const [activeTab, setActiveTab] = useState('1');
+    const [state, setState] = useState({
+        loading: true,
+        paginate: [],
+        forms: [],
+        filter: {
+            name: false,
+            page: 1,
+            limit: 10
+        }
+    })
+    const [dropdownOpen, setOpen] = useState(false)
+    const [modalDelete, setModalDelete] = useState({
+        open: false,
+        id: 0,
+        name: '',
+    })
+    const [modal, setModalOpen] = useState({
+        open: false,
+        title: '',
+        action: '',
+        id: 0
+    })
+
+    const toggle = (id) => (dropdownOpen === id) ? setOpen(false) : setOpen(id) 
+    const toggleModalDelete = (id = 0, name = '') => {
+        setModalDelete({
+            open: !modalDelete.open,
+            id: id,
+            name: name,
+        })
+    }
+    const toggleModal = (title = '', action = '', id = 0) => {
+        setModalOpen({
+            open: !modal.open,
+            title: title,
+            action: action,
+            id: id
+        })
+    }
+    const toggleTab = tab => {
+        if(activeTab !== tab) setActiveTab(tab);
+    }
+
+    const getFormsData = async (page, limit, title) => {
+        let url = `${process.env.REACT_APP_BACKEND_URL}/forms`
+
+        if(page){ url = `${url}?page=${page}` }
+        if(limit){ url = `${url}&limit=${limit}` }
+        if(title){ url = `${url}&title=${title}` }
+
+        let response = await fetch(url)
+        response = await response.json()
+
+        if(response.success) {
+            setState({
+                ...state,
+                paginate: response.paginate,
+                forms: response.data,
+                loading: false,
+            })
+        } else {
+            setState({
+                ...state,
+                loading: false
+            })
+        }
+    }
+
+    const handleFilter = (e, name) => {
+        if(name !== 'page') {
+            setState({
+                ...state,
+                filter: {
+                    ...state.filter,
+                    page: 1,
+                    [name]: (e.value.length === 0) ? false : e.value
+                }
+            })
+        } else {
+            setState({
+                ...state,
+                filter: {
+                    ...state.filter,
+                    [name]: (e.value.length === 0) ? false : e.value
+                }
+            })
+        }
+    }
+
+    let filter = state.filter
+
+    useEffect(()=>{
+        setState({...state, loading: true})
+        const handler = setTimeout(() => {
+            getFormsData(filter.page, filter.limit, filter.title)
+        }, 500)
+
+        return () => {
+            clearTimeout(handler)
+        }
+    }, [filter])
+
+    useEffect(()=>{
+        setState({
+            ...state, 
+            filter: {
+                ...state.filter,
+                page: 1
+            }
+        })
+    }, [filter.limit])
+
+
     const ratings = [
         {name: 'Outstanding', score: 100},
         {name: 'Very Good', score: 75},
@@ -17,75 +148,82 @@ const Forms = () => {
         {name: 'Bad', score: 0},
     ]
 
-    const forms = [
-        {title: 'Evidence Gathering: Learning Walk Record Sheet 19-20'},
-        {title: 'Evidence Gathering: Lesson Observation Rubric 1 19-20'},
-        {title: 'Evidence Gathering: Lesson Observation Rubric 2 19-20'}
-    ]
-
     return (
         <div className="Forms">
             <Container className="mt-4">
                 <Header title="Forms">
-                    <button className="btn btn-success mt-2">Create Form</button>
+                    <Button color="success" className="ml-2 mt-2" onClick={() => toggleModal('Create New Form', 'add')}>Create New Form</Button>
                 </Header>
 
-                <Tab tabs={['Forms', 'Ratings']}>
-                    
-                    <TabPane active={true} tab="Forms">
+                <Nav tabs>
+                    <NavItem>
+                        <NavLink className={`text-dark ${classnames({ active: activeTab === '1' })}`} onClick={() => { toggleTab('1'); }} href="#" >
+                            Forms
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink className={`text-dark ${classnames({ active: activeTab === '2' })}`} onClick={() => { toggleTab('2'); }} href="#" >
+                            Ratings
+                        </NavLink>
+                    </NavItem>
+                </Nav>
+
+                <TabContent activeTab={activeTab} className="border bg-white mb-2">
+                    <TabPane tabId="1">
                         <Table class="m-0">
                             <tr class="bg-light">
-                                <td colspan="2"><input type="text" class="form-control" placeholder="Filter form" /></td>
+                                <td colspan="2" width="100%">
+                                    <Input type="text" placeholder="Filter Form" onChange={(e) => { handleFilter(e.target, 'title')}} />
+                                </td>
                             </tr>
-                            {forms.map(form => 
+                            {!state.loading &&
+                                state.forms.map(form => 
                                 <tr>
                                     <td class="pt-3 pl-4">{form.title}</td>
                                     <td width="200px">
-                                        <button className="btn btn-success">Open</button> <button className="btn btn-dark">Archive</button> 
+                                        <Button className="btn-sm bg-main action mr-2"><FontAwesomeIcon icon={faFolderOpen} /> Open</Button>
+                                        <ButtonDropdown isOpen={dropdownOpen === form.id} toggle={() => toggle(form.id)}>
+                                            <DropdownToggle className="btn-light btn-sm action" caret>
+                                                <FontAwesomeIcon icon={faTasks} /> Action
+                                            </DropdownToggle>
+                                            <DropdownMenu right>
+                                                <DropdownItem onClick={() => {toggleModal('Edit Form', 'edit', form.id)} }><FontAwesomeIcon icon={faPencilAlt} /> Edit</DropdownItem>
+                                                <DropdownItem onClick={() => {toggleModalDelete(form.id, form.name)} }><FontAwesomeIcon icon={faTrash} /> Delete</DropdownItem>
+                                                <DropdownItem divider />
+                                                <DropdownItem><FontAwesomeIcon icon={faArchive} /> Archive</DropdownItem>
+                                            </DropdownMenu>
+                                        </ButtonDropdown>
                                     </td>
                                 </tr>
-                            )}
+                            )}{state.loading && 
+                                <tr>
+                                    <td height="300" colSpan="2"><center><LoadingAnimation style={{margin: '150 auto', height: 55, width: 55 }} /></center></td>
+                                </tr>
+                            }
+                            {(state.forms.length === 0 && !state.loading) && <tr><td colSpan="5">No records found</td></tr>}
                         </Table>
                     </TabPane>
-
-                    <TabPane tab="Ratings"> 
-                        <div class="m-4 w-50">
-                            <div class="d-flex justify-content-between mb-2">
-                                <h5>Ratings</h5>
-                            </div>
-
-                            <Table class="table-bordered table-sm" columns={['Name', 'Score', '']}>
-                                {ratings.map(rating => 
-                                    <tr>
-                                        <td>
-                                            <input type="text" class="form-control" value={rating.name} />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" value={rating.score} />
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-danger btn-sm ml-2 mt-1"><i class="fa fa-times"></i></button>
-                                        </td>
-                                    </tr>
-                                )}
-                                    <tr>
-                                        <td>
-                                            <input type="text" class="form-control" />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" />
-                                        </td>
-                                        <td>
-                                            <button className="btn btn-success btn-sm ml-2 mt-1"><i class="fa fa-plus"></i></button>
-                                        </td>
-                                    </tr>
-                            </Table>
-
-                            <button className="btn btn-warning">Save</button>
-                        </div>
+                    <TabPane tabId="2">
+                    <Row>
+                        <Col className="m-4" sm="6">
+                            <Ratings />
+                        </Col>
+                    </Row>
                     </TabPane>
-                </Tab>
+                </TabContent>
+                <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
+
+                <Modal modal={modal.open} toggle={toggleModal} title={modal.title}>
+                    <FormsForm   action={modal.action} toggle={toggleModal} id={modal.id}
+                                loadForms={() => getFormsData(filter.page, filter.limit, filter.title)} />
+                </Modal>
+
+                <Modal modal={modalDelete.open} toggle={toggleModalDelete} title={'Delete Form'}>
+                    <FormsDelete toggle={toggleModalDelete} title={modalDelete.title} id={modalDelete.id}
+                                loadForms={() => getFormsData(filter.page, filter.limit, filter.title)} />
+                </Modal>
             </Container>
+            <NotificationContainer />
         </div>
     )
 }
