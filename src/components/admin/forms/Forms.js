@@ -8,10 +8,7 @@ import {
 } from 'reactstrap';
 import classnames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { 
-    faTasks, faPencilAlt, faTrash, faSave,
-    faArchive, faFolderOpen, faPlus, faTimes
-} from '@fortawesome/free-solid-svg-icons'
+import { faTasks, faPencilAlt, faTrash, faArchive, faFolderOpen } from '@fortawesome/free-solid-svg-icons'
 
 // Shared
 import Header from '../../../shared/components/Header'
@@ -139,15 +136,6 @@ const Forms = () => {
         })
     }, [filter.limit])
 
-
-    const ratings = [
-        {name: 'Outstanding', score: 100},
-        {name: 'Very Good', score: 75},
-        {name: 'Good', score: 50},
-        {name: 'Acceptable', score: 25},
-        {name: 'Bad', score: 0},
-    ]
-
     return (
         <div className="Forms">
             <Container className="mt-4">
@@ -180,8 +168,8 @@ const Forms = () => {
                                 state.forms.map(form => 
                                 <tr>
                                     <td class="pt-3 pl-4">{form.title}</td>
-                                    <td width="200px">
-                                        <Button className="btn-sm bg-main action mr-2"><FontAwesomeIcon icon={faFolderOpen} /> Open</Button>
+                                    <td  style={{width: '100px'}}>
+                                        <Button className="btn-sm bg-main action border-0 mr-2"><FontAwesomeIcon icon={faFolderOpen} /> Open</Button>
                                         <ButtonDropdown isOpen={dropdownOpen === form.id} toggle={() => toggle(form.id)}>
                                             <DropdownToggle className="btn-light btn-sm action" caret>
                                                 <FontAwesomeIcon icon={faTasks} /> Action
@@ -205,13 +193,13 @@ const Forms = () => {
                     </TabPane>
                     <TabPane tabId="2">
                     <Row>
-                        <Col className="m-4" sm="6">
+                        <Col className="m-4" md="6">
                             <Ratings />
                         </Col>
                     </Row>
                     </TabPane>
                 </TabContent>
-                <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>
+                {activeTab === '1' && <Pagination handleFilter={handleFilter}  pagination={state.paginate} loading={state.loading}/>}
 
                 <Modal modal={modal.open} toggle={toggleModal} title={modal.title}>
                     <FormsForm   action={modal.action} toggle={toggleModal} id={modal.id}
