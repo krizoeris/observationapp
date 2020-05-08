@@ -20,7 +20,7 @@ const compareArrays = (sideA, sideB) => {
         }
     })
 
-    if(count === sideA.length) {
+    if(count === sideA.length && sideA.length === sideB.length) {
         return true
     } else {
         return false
@@ -307,7 +307,7 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
                 body: JSON.stringify(updateUsers)
             })
         }
-        console.log(deleteUsers)
+        //console.log(updateUsers)
         if(deleteUsers.id.length > 0) {
             await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
                 method: 'DELETE',
@@ -315,6 +315,8 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
                 body: JSON.stringify(deleteUsers)
             })
         }
+
+        loadSubjects()
     }
 
     const updateSubjectData = async () => {
