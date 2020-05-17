@@ -319,6 +319,8 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
         loadSubjects()
     }
 
+    console.log(inputs)
+
     const updateSubjectData = async () => {
         setLoading(true)
         if(validate()) {

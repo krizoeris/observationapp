@@ -1,5 +1,6 @@
 // Dependencies
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import { NotificationContainer } from 'react-notifications';
 import {    
     ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,
@@ -38,7 +39,7 @@ const Forms = () => {
     const [modalDelete, setModalDelete] = useState({
         open: false,
         id: 0,
-        name: '',
+        title: '',
     })
     const [modal, setModalOpen] = useState({
         open: false,
@@ -48,11 +49,11 @@ const Forms = () => {
     })
 
     const toggle = (id) => (dropdownOpen === id) ? setOpen(false) : setOpen(id) 
-    const toggleModalDelete = (id = 0, name = '') => {
+    const toggleModalDelete = (id = 0, title = '') => {
         setModalDelete({
             open: !modalDelete.open,
             id: id,
-            name: name,
+            title: title,
         })
     }
     const toggleModal = (title = '', action = '', id = 0) => {
@@ -169,14 +170,14 @@ const Forms = () => {
                                 <tr>
                                     <td class="pt-3 pl-4">{form.title}</td>
                                     <td  style={{width: '100px'}}>
-                                        <Button className="btn-sm bg-main action border-0 mr-2"><FontAwesomeIcon icon={faFolderOpen} /> Open</Button>
+                                        <Link className="btn-sm bg-main text-light action border-0 mr-2" to={`/admin/forms/${form.id}`}><FontAwesomeIcon icon={faFolderOpen} /> Open</Link>
                                         <ButtonDropdown isOpen={dropdownOpen === form.id} toggle={() => toggle(form.id)}>
                                             <DropdownToggle className="btn-light btn-sm action" caret>
                                                 <FontAwesomeIcon icon={faTasks} /> Action
                                             </DropdownToggle>
                                             <DropdownMenu right>
                                                 <DropdownItem onClick={() => {toggleModal('Edit Form', 'edit', form.id)} }><FontAwesomeIcon icon={faPencilAlt} /> Edit</DropdownItem>
-                                                <DropdownItem onClick={() => {toggleModalDelete(form.id, form.name)} }><FontAwesomeIcon icon={faTrash} /> Delete</DropdownItem>
+                                                <DropdownItem onClick={() => {toggleModalDelete(form.id, form.title)} }><FontAwesomeIcon icon={faTrash} /> Delete</DropdownItem>
                                                 <DropdownItem divider />
                                                 <DropdownItem><FontAwesomeIcon icon={faArchive} /> Archive</DropdownItem>
                                             </DropdownMenu>

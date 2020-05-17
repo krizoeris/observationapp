@@ -15,6 +15,7 @@ import Users from '../admin/users/Users';
 import Subjects from '../admin/subjects/Subjects';
 import Grades from '../admin/grades/Grades';
 import Forms from '../admin/forms/Forms';
+import CustomForm from '../admin/forms/CustomForm';
 
 function App() {
   // GlobalState
@@ -32,7 +33,8 @@ function App() {
           <Route path="/admin/users" component={Users} />
           <Route path="/admin/subjects" component={Subjects} />
           <Route path="/admin/grades" component={Grades} />
-          <Route path="/admin/forms" component={Forms} />
+          <Route exact path="/admin/forms" component={Forms} />
+          <Route path="/admin/forms/:id" component={CustomForm} />
         </Switch>
       </BrowserRouter>
     </AppContext.Provider>

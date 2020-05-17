@@ -2,6 +2,10 @@ body {
     background: #f5f3f2;
 }
 
+a:hover {
+    text-decoration: none;
+}
+
 .bg-main {
     background: #2653a7 !important;
     color: #fff;
