@@ -229,6 +229,12 @@ const CustomForm = ({match}) => {
                     })
                 }
             }
+
+            const updateAttributes = await fetch(process.env.REACT_APP_BACKEND_URL+'/attributes/bulk', {
+                method: 'PUT',
+                headers: {"Content-type": "application/json"},
+                body: JSON.stringify(qEdit.attributes)
+            })
     
             const updateQuestion = await fetch(process.env.REACT_APP_BACKEND_URL+'/questions', {
                 method: 'PUT',
@@ -236,10 +242,10 @@ const CustomForm = ({match}) => {
                 body: JSON.stringify(data)
             })
             
-            const response = await updateQuestion.json()
-            const resQuestion = response.message
+            const qResponse = await updateQuestion.json()
+            const aResponse = await updateAttributes.json()
 
-            if(response.success) {
+            if(qResponse.success && aResponse.success) {
                 NotificationManager.success(`${data.title}`, 'Successfully Edited Question');
                 setEditQuestion({
                     id: 0,
@@ -260,7 +266,7 @@ const CustomForm = ({match}) => {
     }, [])
 
     return (
-        <div>
+        <div className="mb-4">
             <div className="bg-white p-2 d-flex">
                 <Link to="/admin/forms" className="m-2 text-success"><FontAwesomeIcon icon={faArrowAltCircleLeft} /> <strong>Go Back</strong></Link>
                 <Container style={{maxWidth: '900px'}}>
