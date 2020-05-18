@@ -9,13 +9,17 @@ import './App.css';
 // Shared
 import Navigation from '../../shared/components/Navigation';
 
+// User
+import Login from '../user/Login';
+
 // Admin Pages
 import Home from '../admin/Home';
-import Users from '../admin/users/Users';
-import Subjects from '../admin/subjects/Subjects';
-import Grades from '../admin/grades/Grades';
-import Forms from '../admin/forms/Forms';
-import CustomForm from '../admin/forms/CustomForm';
+import AdminLogin from '../admin/Login';
+import AdminUsers from '../admin/users/Users';
+import AdminSubjects from '../admin/subjects/Subjects';
+import AdminGrades from '../admin/grades/Grades';
+import AdminForms from '../admin/forms/Forms';
+import AdminCustomForm from '../admin/forms/CustomForm';
 
 function App() {
   // GlobalState
@@ -30,11 +34,14 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
 
-          <Route path="/admin/users" component={Users} />
-          <Route path="/admin/subjects" component={Subjects} />
-          <Route path="/admin/grades" component={Grades} />
-          <Route exact path="/admin/forms" component={Forms} />
-          <Route path="/admin/forms/:id" component={CustomForm} />
+          <Route path="/login" component={Login} />
+
+          <Route path="/admin/login" component={AdminLogin} />
+          <Route path="/admin/users" component={AdminUsers} />
+          <Route path="/admin/subjects" component={AdminSubjects} />
+          <Route path="/admin/grades" component={AdminGrades} />
+          <Route exact path="/admin/forms" component={AdminForms} />
+          <Route path="/admin/forms/:id" component={AdminCustomForm} />
         </Switch>
       </BrowserRouter>
     </AppContext.Provider>
