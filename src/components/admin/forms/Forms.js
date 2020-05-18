@@ -169,7 +169,7 @@ const Forms = () => {
                                 state.forms.map(form => 
                                 <tr>
                                     <td class="pt-3 pl-4">{form.title}</td>
-                                    <td  style={{width: '100px'}}>
+                                    <td  style={{width: '120px'}}>
                                         <Link className="btn-sm bg-main text-light action border-0 mr-2" to={`/admin/forms/${form.id}`}><FontAwesomeIcon icon={faFolderOpen} /> Open</Link>
                                         <ButtonDropdown isOpen={dropdownOpen === form.id} toggle={() => toggle(form.id)}>
                                             <DropdownToggle className="btn-light btn-sm action" caret>

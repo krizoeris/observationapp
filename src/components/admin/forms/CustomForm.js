@@ -269,12 +269,12 @@ const CustomForm = ({match}) => {
         <div className="mb-4">
             <div className="bg-white p-2 d-flex">
                 <Link to="/admin/forms" className="m-2 text-success"><FontAwesomeIcon icon={faArrowAltCircleLeft} /> <strong>Go Back</strong></Link>
-                <Container style={{maxWidth: '900px'}}>
+                <Container style={{maxWidth: '1240px'}}>
                     <Button color="success" onClick={toggleModal}><FontAwesomeIcon icon={faPlusCircle} /> Add Question</Button>
                 </Container>
             </div>
 
-            <Container style={{maxWidth: '800px'}}>
+            <Container>
                 <div className="mt-4 mb-2">
                     <h3>{formInput.title}</h3>
                     <p>{formInput.description}</p>
@@ -312,7 +312,7 @@ const CustomForm = ({match}) => {
                                         <strong className="d-inline mr-1">Order</strong>
                                         <Input  className="d-inline form-control-sm" type="select" 
                                                 value={q.order} onChange={e => setQuestionInput('order', index, e.target.value)} 
-                                                disabled={editQuestion.id!==q.id} style={{width: "50px"}}>
+                                                disabled={editQuestion.id!==q.id} style={{width: "80px"}}>
                                             {formInput.questions.map((q, index) => 
                                                 <option>{index+1}</option>
                                             )}
