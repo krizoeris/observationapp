@@ -7,7 +7,7 @@ import {
 const Login = () => {
     return (
         <div>
-            <Container style={{marginTop: 'calc(50vh - 220px)'}}>
+            <Container style={{marginTop: 'calc(50vh - 245px)'}}>
                 <Row>
                     <Col className="pr-md-2 mb-sm-2" md="5" sm="12">
                         <Card className="shadow-sm border-0 p-md-3">

@@ -24,7 +24,7 @@ import AdminCustomForm from '../admin/forms/CustomForm';
 function App() {
   // GlobalState
   const [globalState, setGlobalState] = useState({
-    userType: 'Admin'
+    userType: 'observer'
   })
   
   return (

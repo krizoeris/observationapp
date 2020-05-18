@@ -28,6 +28,7 @@ const Navigation = () => {
             <NavbarBrand className="navbar-brand" href="#">Observation App</NavbarBrand>
             <NavbarToggler onClick={toggleNavbar} className="mr-2" />
             <Collapse isOpen={!collapsed} navbar>
+                {globalState.userType === 'admin' &&
                 <Nav className="mx-auto" navbar>
                     <NavItem className="p-1">
                         <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">
@@ -55,17 +56,40 @@ const Navigation = () => {
                         </NavLink>
                     </NavItem>
                 </Nav>
+                }
 
-                <Nav navbar>
-                    <UncontrolledDropdown className="p-1" nav inNavbar>
-                        <DropdownToggle nav caret>
-                            {userType}
-                        </DropdownToggle>
-                        <DropdownMenu right>
-                            <DropdownItem>Logout</DropdownItem>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
+                {['teacher', 'observer', 'faclitator'].includes(globalState.userType) &&
+                <Nav className="mx-auto" navbar>
+                    <NavItem className="p-1">
+                        <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">
+                            <FontAwesomeIcon icon={faHome} /> Dashboard
+                        </NavLink>
+                    </NavItem>
+                    <NavItem className="p-1">
+                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/users">
+                            <FontAwesomeIcon icon={faUser} /> Observations
+                        </NavLink>
+                    </NavItem>
+                    <NavItem className="p-1">
+                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/subjects">
+                            <FontAwesomeIcon icon={faBook} /> Reports
+                        </NavLink>
+                    </NavItem>
                 </Nav>
+                }
+
+                {globalState.userType &&
+                    <Nav navbar>
+                        <UncontrolledDropdown className="p-1" nav inNavbar>
+                            <DropdownToggle nav caret>
+                                {userType}
+                            </DropdownToggle>
+                            <DropdownMenu right>
+                                <DropdownItem>Logout</DropdownItem>
+                            </DropdownMenu>
+                        </UncontrolledDropdown>
+                    </Nav>
+                }
             </Collapse>
         </Navbar>
     )
