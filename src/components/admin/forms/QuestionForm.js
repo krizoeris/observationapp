@@ -86,14 +86,20 @@ const QuestionForm = ({formId, questions, ratings, ratingsTable, toggle, loadQue
 
                 await fetch(process.env.REACT_APP_BACKEND_URL+'/questions/bulk', {
                     method: 'PUT',
-                    headers: {"Content-type": "application/json"},
+                    headers: {
+                        "Content-type": "application/json",
+                        'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                    },
                     body: JSON.stringify(request)
                 })
             }
     
             const createQuestion = await fetch(process.env.REACT_APP_BACKEND_URL+'/questions', {
                 method: 'POST',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             
@@ -109,7 +115,10 @@ const QuestionForm = ({formId, questions, ratings, ratingsTable, toggle, loadQue
 
                 const createAttribute = await fetch(process.env.REACT_APP_BACKEND_URL+'/attributes/bulk', {
                     method: 'POST',
-                    headers: {"Content-type": "application/json"},
+                    headers: {
+                        "Content-type": "application/json",
+                        'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                    },
                     body: JSON.stringify(attrInput)
                 })
                 

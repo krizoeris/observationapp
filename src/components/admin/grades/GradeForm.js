@@ -29,7 +29,11 @@ const GradeForm = ({loadGrades, toggle, action, id}) => {
 
     const getGradesData = async () => {
         let url = `${process.env.REACT_APP_BACKEND_URL}/grades/${id}`
-        let response = await fetch(url)
+        let response = await fetch(url, {
+            headers: {
+                'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+            }
+        })
         response = await response.json()
         response = response.data
 
@@ -50,7 +54,10 @@ const GradeForm = ({loadGrades, toggle, action, id}) => {
     
             const createGrade = await fetch(process.env.REACT_APP_BACKEND_URL+'/grades', {
                 method: 'POST',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             
@@ -78,7 +85,10 @@ const GradeForm = ({loadGrades, toggle, action, id}) => {
     
             const updateGrade = await fetch(process.env.REACT_APP_BACKEND_URL+'/grades', {
                 method: 'PUT',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             

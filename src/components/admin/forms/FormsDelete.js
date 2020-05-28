@@ -8,7 +8,10 @@ const FormsDelete = ({id, toggle, title, loadForms}) => {
     const deleteFormData = async () => {
         const deleteForm = await fetch(`${process.env.REACT_APP_BACKEND_URL}/forms`, {
             method: 'DELETE',
-            headers: {"Content-type": "application/json"},
+            headers: {
+                "Content-type": "application/json",
+                'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+            },
             body: JSON.stringify({
                 id: id
             })

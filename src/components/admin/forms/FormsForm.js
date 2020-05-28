@@ -30,7 +30,9 @@ const FormsForm = ({loadForms, toggle, action, id}) => {
 
     const getFormsData = async () => {
         let url = `${process.env.REACT_APP_BACKEND_URL}/forms/${id}`
-        let response = await fetch(url)
+        let response = await fetch(url, {
+            headers: {'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))}
+        })
         response = await response.json()
         response = response.data
 
@@ -53,7 +55,10 @@ const FormsForm = ({loadForms, toggle, action, id}) => {
     
             const createForm = await fetch(process.env.REACT_APP_BACKEND_URL+'/forms', {
                 method: 'POST',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             
@@ -82,7 +87,10 @@ const FormsForm = ({loadForms, toggle, action, id}) => {
     
             const updateForm = await fetch(process.env.REACT_APP_BACKEND_URL+'/forms', {
                 method: 'PUT',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             

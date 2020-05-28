@@ -57,7 +57,9 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
 
     const getUsersData = async () => {
         let url = `${process.env.REACT_APP_BACKEND_URL}/users`
-        let response = await fetch(url)
+        let response = await fetch(url, {
+            headers: {'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))}
+        })
         response = await response.json()
         response = response.data
 
@@ -97,7 +99,11 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
 
     const getSubjectsData = async () => {
         let url = `${process.env.REACT_APP_BACKEND_URL}/subjects/${id}`
-        let response = await fetch(url)
+        let response = await fetch(url, {
+            headers: {
+                'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+            }
+        })
         response = await response.json()
         response = response.data
 
@@ -150,7 +156,10 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
     
             const createSubject = await fetch(process.env.REACT_APP_BACKEND_URL+'/subjects', {
                 method: 'POST',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             
@@ -198,7 +207,10 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
     
                 await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
                     method: 'POST',
-                    headers: {"Content-type": "application/json"},
+                    headers: {
+                        "Content-type": "application/json",
+                        'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                    },
                     body: JSON.stringify(subjectUsers)
                 })
             }
@@ -296,14 +308,20 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
         if(addUsers.length > 0) {
             await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
                 method: 'POST',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(addUsers)
             })
         }
         if(updateUsers.length > 0) {
             await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
                 method: 'PUT',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(updateUsers)
             })
         }
@@ -311,7 +329,10 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
         if(deleteUsers.id.length > 0) {
             await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
                 method: 'DELETE',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(deleteUsers)
             })
         }
@@ -332,7 +353,10 @@ const SubjectForm = ({loadSubjects, toggle, action, id}) => {
     
             const updateSubject = await fetch(process.env.REACT_APP_BACKEND_URL+'/subjects', {
                 method: 'PUT',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             

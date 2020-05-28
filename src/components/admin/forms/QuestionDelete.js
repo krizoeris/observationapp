@@ -20,14 +20,20 @@ const QuestionDelete = ({id, questions, toggle, title, loadQuestion}) => {
             
             await fetch(process.env.REACT_APP_BACKEND_URL+'/questions/bulk', {
                 method: 'PUT',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(request)
             })
         }
         
         const deleteQuestion = await fetch(`${process.env.REACT_APP_BACKEND_URL}/questions`, {
             method: 'DELETE',
-            headers: {"Content-type": "application/json"},
+            headers: {
+                "Content-type": "application/json",
+                'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+            },
             body: JSON.stringify({
                 id: id
             })

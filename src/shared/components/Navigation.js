@@ -1,8 +1,11 @@
 // Dependencies
 import React, { useContext, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHome, faUser, faBook, faFile, faList } from '@fortawesome/free-solid-svg-icons'
+import { 
+    faHome, faUser, faBook, faFile, faList,
+    faFileSignature, faChartBar 
+} from '@fortawesome/free-solid-svg-icons'
 import {
     Collapse, Navbar, NavbarToggler,
     NavbarBrand, Nav, NavItem, UncontrolledDropdown,
@@ -11,27 +14,31 @@ import {
 
 // Local
 import './Navigation.css';
-import AppContext from '../../AppContext'
 
-const Navigation = () => {
-    // Global State
-    const [globalState, setGlobalState] = useContext(AppContext)
+const Navigation = ({type}) => {
     // Local State
     const [collapsed, setCollapsed] = useState(true);
 
     const toggleNavbar = () => setCollapsed(!collapsed);
 
-    let userType = globalState.userType
+    let history = useHistory()
+
+    const logOut = () => {
+        sessionStorage.clear()
+        history.push("/admin/login", { message: 'Successfully Logged Out!' })
+    }
 
     return (
         <Navbar className="main-nav shadow-sm" color="dark" dark expand="lg">
             <NavbarBrand className="navbar-brand" href="#">Observation App</NavbarBrand>
-            <NavbarToggler onClick={toggleNavbar} className="mr-2" />
+            {(type === "admin" || type === "user") &&
+                <NavbarToggler onClick={toggleNavbar} className="mr-2" />
+            }
             <Collapse isOpen={!collapsed} navbar>
-                {globalState.userType === 'admin' &&
+                {type === "admin" &&
                 <Nav className="mx-auto" navbar>
                     <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">
+                        <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/admin">
                             <FontAwesomeIcon icon={faHome} /> Home
                         </NavLink>
                     </NavItem>
@@ -58,34 +65,34 @@ const Navigation = () => {
                 </Nav>
                 }
 
-                {['teacher', 'observer', 'faclitator'].includes(globalState.userType) &&
+                {type === 'user' &&
                 <Nav className="mx-auto" navbar>
                     <NavItem className="p-1">
                         <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">
-                            <FontAwesomeIcon icon={faHome} /> Dashboard
+                            <FontAwesomeIcon icon={faHome} /> Home
                         </NavLink>
                     </NavItem>
                     <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/users">
-                            <FontAwesomeIcon icon={faUser} /> Observations
+                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/observations">
+                            <FontAwesomeIcon icon={faFileSignature} /> Observations
                         </NavLink>
                     </NavItem>
                     <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/subjects">
-                            <FontAwesomeIcon icon={faBook} /> Reports
+                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/reports">
+                            <FontAwesomeIcon icon={faChartBar} /> Reports
                         </NavLink>
                     </NavItem>
                 </Nav>
                 }
 
-                {globalState.userType &&
+                {(type === 'admin' || type === 'user') &&
                     <Nav navbar>
                         <UncontrolledDropdown className="p-1" nav inNavbar>
                             <DropdownToggle nav caret>
-                                {userType}
+                                {`NAME HERE`}
                             </DropdownToggle>
                             <DropdownMenu right>
-                                <DropdownItem>Logout</DropdownItem>
+                                <DropdownItem onClick={logOut}>Logout</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </Nav>

@@ -23,7 +23,9 @@ const Ratings = () => {
     })
 
     const getRatings = async () => {
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/ratings`)
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/ratings`, {
+                            headers: { 'Authorization': 'Bearer '.concat(sessionStorage.getItem('token')) }
+                        })
         response = await response.json()
         response = await response.data
         
@@ -79,7 +81,10 @@ const Ratings = () => {
         if(addRating.length > 0) {
             let request = await fetch(`${process.env.REACT_APP_BACKEND_URL}/ratings/bulk`, {
                 method: 'POST',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(addRating)
             })
 
@@ -93,7 +98,10 @@ const Ratings = () => {
         if(updateRating.length > 0) {
             let request = await fetch(`${process.env.REACT_APP_BACKEND_URL}/ratings/bulk`, {
                 method: 'PUT',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(updateRating)
             })
 
@@ -107,7 +115,10 @@ const Ratings = () => {
         if(deleteRating.id.length > 0) {
             let request = await fetch(`${process.env.REACT_APP_BACKEND_URL}/ratings`, {
                 method: 'DELETE',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(deleteRating)
             })
 

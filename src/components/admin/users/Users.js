@@ -83,7 +83,9 @@ const Users = () => {
         if(lname){ url = `${url}&lname=${lname}` }
         if(type){ url = `${url}&type=${type}` }
 
-        let response = await fetch(url)
+        let response = await fetch(url, {
+                            headers: {'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))}
+                        })
         response = await response.json()
 
         if(response.success) {

@@ -8,7 +8,10 @@ const SubjectDelete = ({id, toggle, name, loadSubjects}) => {
     const deleteSubjectData = async () => {
         const deleteSubject = await fetch(`${process.env.REACT_APP_BACKEND_URL}/subjects`, {
             method: 'DELETE',
-            headers: {"Content-type": "application/json"},
+            headers: {
+                "Content-type": "application/json",
+                'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+            },
             body: JSON.stringify({
                 id: id
             })

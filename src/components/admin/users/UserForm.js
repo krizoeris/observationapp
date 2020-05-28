@@ -45,7 +45,9 @@ const UserForm = ({loadUser, toggle, action, id}) => {
 
     const getSubjectsData = async () => {
         let url = `${process.env.REACT_APP_BACKEND_URL}/subjects`
-        let response = await fetch(url)
+        let response = await fetch(url, {
+            headers: {'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))}
+        })
         response = await response.json()
         response = response.data
 
@@ -63,7 +65,9 @@ const UserForm = ({loadUser, toggle, action, id}) => {
 
     const getUsersData = async () => {
         let url = `${process.env.REACT_APP_BACKEND_URL}/users/${id}`
-        let response = await fetch(url)
+        let response = await fetch(url, {
+            headers: {'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))}
+        })
         response = await response.json()
         response = response.data
 
@@ -111,7 +115,10 @@ const UserForm = ({loadUser, toggle, action, id}) => {
 
             const createUser = await fetch(process.env.REACT_APP_BACKEND_URL+'/users', {
                 method: 'POST',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             
@@ -132,7 +139,10 @@ const UserForm = ({loadUser, toggle, action, id}) => {
     
                 await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
                     method: 'POST',
-                    headers: {"Content-type": "application/json"},
+                    headers: {
+                        "Content-type": "application/json",
+                        'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                    },
                     body: JSON.stringify(subjects)
                 })
             }
@@ -174,7 +184,10 @@ const UserForm = ({loadUser, toggle, action, id}) => {
         if(deleteSubjects.id.length > 0) {
             await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
                 method: 'DELETE',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(deleteSubjects)
             })
         }
@@ -182,7 +195,9 @@ const UserForm = ({loadUser, toggle, action, id}) => {
         if(addSubjects.length > 0) {
             await fetch(process.env.REACT_APP_BACKEND_URL+'/subject-users', {
                 method: 'POST',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json", 
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))},
                 body: JSON.stringify(addSubjects)
             })
         }
@@ -209,7 +224,10 @@ const UserForm = ({loadUser, toggle, action, id}) => {
 
             const updateUser = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users`, {
                 method: 'PUT',
-                headers: {"Content-type": "application/json"},
+                headers: { 
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             const response = await updateUser.json()

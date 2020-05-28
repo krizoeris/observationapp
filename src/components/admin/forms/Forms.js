@@ -75,7 +75,9 @@ const Forms = () => {
         if(limit){ url = `${url}&limit=${limit}` }
         if(title){ url = `${url}&title=${title}` }
 
-        let response = await fetch(url)
+        let response = await fetch(url, {
+            headers: {'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))}
+        })
         response = await response.json()
 
         if(response.success) {

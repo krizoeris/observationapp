@@ -68,7 +68,11 @@ const Grades = () => {
         if(limit){ url = `${url}&limit=${limit}` }
         if(name){ url = `${url}&name=${name}` }
 
-        let response = await fetch(url)
+        let response = await fetch(url, {
+            headers: {
+                'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+            }
+        })
         response = await response.json()
 
         if(response.success) {

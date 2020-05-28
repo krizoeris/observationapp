@@ -8,7 +8,10 @@ const GradeDelete = ({id, toggle, name, loadGrades}) => {
     const deleteGradeData = async () => {
         const deleteGrade = await fetch(`${process.env.REACT_APP_BACKEND_URL}/grades`, {
             method: 'DELETE',
-            headers: {"Content-type": "application/json"},
+            headers: {
+                "Content-type": "application/json",
+                'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+            },
             body: JSON.stringify({
                 id: id
             })

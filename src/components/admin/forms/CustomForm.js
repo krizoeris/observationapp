@@ -92,7 +92,9 @@ const CustomForm = ({match}) => {
     }
 
     const getFormData = async () => {
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/forms/details/${match.params.id}`)
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/forms/details/${match.params.id}`, {
+            headers: {'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))}
+        })
         response = await response.json()
 
         if(response.success) {
@@ -101,7 +103,9 @@ const CustomForm = ({match}) => {
     }
 
     const getRatingsData = async () => {
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/ratings`)
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/ratings`, {
+            headers: {'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))}
+        })
         response = await response.json()
 
         if(response.success) {
@@ -195,7 +199,10 @@ const CustomForm = ({match}) => {
 
                 await fetch(process.env.REACT_APP_BACKEND_URL+'/questions/bulk', {
                     method: 'PUT',
-                    headers: {"Content-type": "application/json"},
+                    headers: {
+                        "Content-type": "application/json",
+                        'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                    },
                     body: JSON.stringify(request)
                 })
             }
@@ -207,7 +214,10 @@ const CustomForm = ({match}) => {
 
                     await fetch(process.env.REACT_APP_BACKEND_URL+'/attributes/bulk', {
                         method: 'POST',
-                        headers: {"Content-type": "application/json"},
+                        headers: {
+                            "Content-type": "application/json",
+                            'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                        },
                         body: JSON.stringify(qEdit.attributes)
                     })
                 }
@@ -222,7 +232,10 @@ const CustomForm = ({match}) => {
 
                     await fetch(process.env.REACT_APP_BACKEND_URL+'/attributes', {
                         method: 'DELETE',
-                        headers: {"Content-type": "application/json"},
+                        headers: {
+                            "Content-type": "application/json",
+                            'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                        },
                         body: JSON.stringify({
                             id: attrInput
                         })
@@ -232,13 +245,19 @@ const CustomForm = ({match}) => {
 
             const updateAttributes = await fetch(process.env.REACT_APP_BACKEND_URL+'/attributes/bulk', {
                 method: 'PUT',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(qEdit.attributes)
             })
     
             const updateQuestion = await fetch(process.env.REACT_APP_BACKEND_URL+'/questions', {
                 method: 'PUT',
-                headers: {"Content-type": "application/json"},
+                headers: {
+                    "Content-type": "application/json",
+                    'Authorization': 'Bearer '.concat(sessionStorage.getItem('token'))
+                },
                 body: JSON.stringify(data)
             })
             
