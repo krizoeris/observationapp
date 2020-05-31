@@ -14,10 +14,13 @@ import {
 
 // Local
 import './Navigation.css';
+import AppContext from '../../AppContext';
 
-const Navigation = ({type}) => {
+const Navigation = ({type, redirectLogin}) => {
     // Local State
     const [collapsed, setCollapsed] = useState(true);
+
+    const [globalState, setGlobalState] = useContext(AppContext);
 
     const toggleNavbar = () => setCollapsed(!collapsed);
 
@@ -25,7 +28,7 @@ const Navigation = ({type}) => {
 
     const logOut = () => {
         sessionStorage.clear()
-        history.push("/admin/login", { message: 'Successfully Logged Out!' })
+        history.push(redirectLogin, { message: 'Successfully Logged Out!' })
     }
 
     return (
@@ -36,60 +39,60 @@ const Navigation = ({type}) => {
             }
             <Collapse isOpen={!collapsed} navbar>
                 {type === "admin" &&
-                <Nav className="mx-auto" navbar>
-                    <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/admin">
-                            <FontAwesomeIcon icon={faHome} /> Home
-                        </NavLink>
-                    </NavItem>
-                    <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/users">
-                            <FontAwesomeIcon icon={faUser} /> Users
-                        </NavLink>
-                    </NavItem>
-                    <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/subjects">
-                            <FontAwesomeIcon icon={faBook} /> Subjects
-                        </NavLink>
-                    </NavItem>
-                    <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/grades">
-                            <FontAwesomeIcon icon={faFile} /> Grades
-                        </NavLink>
-                    </NavItem>
-                    <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/forms">
-                            <FontAwesomeIcon icon={faList} /> Forms
-                        </NavLink>
-                    </NavItem>
-                </Nav>
+                    <Nav className="mx-auto" navbar>
+                        <NavItem className="p-1">
+                            <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/admin">
+                                <FontAwesomeIcon icon={faHome} /> Home
+                            </NavLink>
+                        </NavItem>
+                        <NavItem className="p-1">
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/users">
+                                <FontAwesomeIcon icon={faUser} /> Users
+                            </NavLink>
+                        </NavItem>
+                        <NavItem className="p-1">
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/subjects">
+                                <FontAwesomeIcon icon={faBook} /> Subjects
+                            </NavLink>
+                        </NavItem>
+                        <NavItem className="p-1">
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/grades">
+                                <FontAwesomeIcon icon={faFile} /> Grades
+                            </NavLink>
+                        </NavItem>
+                        <NavItem className="p-1">
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/admin/forms">
+                                <FontAwesomeIcon icon={faList} /> Forms
+                            </NavLink>
+                        </NavItem>
+                    </Nav>
                 }
 
                 {type === 'user' &&
-                <Nav className="mx-auto" navbar>
-                    <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">
-                            <FontAwesomeIcon icon={faHome} /> Home
-                        </NavLink>
-                    </NavItem>
-                    <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/observations">
-                            <FontAwesomeIcon icon={faFileSignature} /> Observations
-                        </NavLink>
-                    </NavItem>
-                    <NavItem className="p-1">
-                        <NavLink className="nav-link pl-md-3 pr-md-3" to="/reports">
-                            <FontAwesomeIcon icon={faChartBar} /> Reports
-                        </NavLink>
-                    </NavItem>
-                </Nav>
+                    <Nav className="mx-auto" navbar>
+                        <NavItem className="p-1">
+                            <NavLink className="nav-link pl-md-3 pr-md-3 home" to="/">
+                                <FontAwesomeIcon icon={faHome} /> Home
+                            </NavLink>
+                        </NavItem>
+                        <NavItem className="p-1">
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/observations">
+                                <FontAwesomeIcon icon={faFileSignature} /> Observations
+                            </NavLink>
+                        </NavItem>
+                        <NavItem className="p-1">
+                            <NavLink className="nav-link pl-md-3 pr-md-3" to="/reports">
+                                <FontAwesomeIcon icon={faChartBar} /> Reports
+                            </NavLink>
+                        </NavItem>
+                    </Nav>
                 }
 
                 {(type === 'admin' || type === 'user') &&
                     <Nav navbar>
                         <UncontrolledDropdown className="p-1" nav inNavbar>
                             <DropdownToggle nav caret>
-                                {`NAME HERE`}
+                                
                             </DropdownToggle>
                             <DropdownMenu right>
                                 <DropdownItem onClick={logOut}>Logout</DropdownItem>

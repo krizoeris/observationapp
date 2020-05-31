@@ -34,7 +34,7 @@ function App() {
   const AdminRoute = ({component: Component, ...restOfProps}) => {
     return(
       <div>
-        <Navigation type="admin" />
+        <Navigation type="admin" redirectLogin="/admin/login/" />
         <Route {...restOfProps} 
           render={
             props => (sessionStorage.getItem('isAdmin') && sessionStorage.getItem('token')) ?
@@ -66,6 +66,24 @@ function App() {
     )
   }
 
+  // User Routes
+  const UserRoute = ({component: Component, ...restOfProps}) => {
+    return(
+      <div>
+        <Navigation type="user" redirectLogin="/login/" />
+        <Route {...restOfProps} 
+          render={
+            () => (sessionStorage.getItem('isUser') && sessionStorage.getItem('token')) ?
+            (<Component {...restOfProps} />) :
+            (<Redirect to={
+              {pathname: '/login'}
+            } />)
+          }
+        />
+      </div>
+    )
+  }
+
   // User Login Routes
   const UserLoginRoute = ({component: Component, ...restOfProps}) => {
     return(
@@ -73,7 +91,7 @@ function App() {
         <Navigation />
         <Route {...restOfProps} 
           render={
-            () => sessionStorage.getItem('token') ?
+            () => (sessionStorage.getItem('isUser') && sessionStorage.getItem('token')) ?
             (<Redirect to={
               {pathname: '/'}
             } />) :
@@ -89,10 +107,10 @@ function App() {
       <BrowserRouter>
         
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login} />
-          <Route exact path="/observations" component={Observations} />
-          <Route path="/reports" component={Reports} />
+          <UserLoginRoute path="/login" component={Login} />
+          <UserRoute exact path="/" component={Home} />
+          <UserRoute exact path="/observations" component={Observations} />
+          <UserRoute path="/reports" component={Reports} />
 
           <AdminLoginRoute path="/admin/login" component={AdminLogin} />
           <AdminRoute exact path="/admin/" component={AdminHome} />
