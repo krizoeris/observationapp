@@ -264,7 +264,7 @@ const UserForm = ({loadUser, toggle, action, id}) => {
         
         if(!inputs.passwordInput && action === 'add') {
             passwordError = "Please enter password"
-        } else if(inputs.passwordInput && inputs.passwordInput.length <= 8) {
+        } else if(inputs.passwordInput && inputs.passwordInput.length < 8) {
             passwordError = "Password must be 8 characters"
         }
         

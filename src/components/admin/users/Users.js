@@ -41,6 +41,8 @@ const Users = () => {
             limit: 10
         }
     })
+    // For checkbox
+    const [deleteChecked, setDeleteChecked] = useState([])
 
     const [dropdownOpen, setDropdownOpen] = useState(false)
     const [modalDelete, setModalDelete] = useState({
@@ -89,6 +91,8 @@ const Users = () => {
         response = await response.json()
 
         if(response.success) {
+            // For checkbox
+            setDeleteChecked([])
             setState({
                 ...state,
                 paginate: response.paginate,
@@ -100,6 +104,25 @@ const Users = () => {
                 ...state,
                 loading: false
             })
+        }
+    }
+    // For checkbox
+    const handleDeleteChecked = (id) => {
+        let idArr = deleteChecked
+        if(idArr.includes(id)) {
+            let idArrFiltered = idArr.filter(idA => idA !== id)
+            setDeleteChecked(idArrFiltered)
+        } else {
+            idArr = [...idArr, id]
+            setDeleteChecked(idArr)
+        }
+    }
+    // For checkbox
+    const handleCheckAll = () => {
+        if(deleteChecked.length !== state.users.length) {
+            setDeleteChecked(state.users.map(user => user.id))
+        } else {
+            setDeleteChecked([])
         }
     }
 
@@ -147,11 +170,19 @@ const Users = () => {
             }
         })
     }, [filter.limit])
+
     
     return (
         <div className="Users">
             <Container className="mt-4 mb-4">
                 <Header title="Users">
+                    {/** For Checkbox **/}
+                    {deleteChecked.length > 0 && 
+                        <Button color="danger" className="ml-2 mt-2"
+                                onClick={() => toggleModalDelete(deleteChecked, deleteChecked.length,'users')}>
+                                    Delete ({deleteChecked.length})
+                        </Button> 
+                    }
                     <Button color="success" className="ml-2 mt-2" onClick={() => toggleModal('Add New User', 'add')}>Add New User</Button>
                 </Header>
                 
@@ -160,7 +191,8 @@ const Users = () => {
                         <Table className="m-0" columns={['', 'First Name', 'Last Name', 'User Type', '']}>
                         <tr className="bg-light">
                             <td style={{minWidth: '30px'}}>
-                                <Input type="checkbox" className="checkTable table-top"/>
+                                {/** For Checkbox **/}
+                                <Input type="checkbox" className="checkTable table-top" onChange={handleCheckAll} />
                             </td>
                             <td width="35%">
                                 <Input type="text" placeholder="Filter first name" onChange={(e) => { handleFilter(e.target, 'fname')}} />
@@ -182,7 +214,7 @@ const Users = () => {
                         {!state.loading && 
                             state.users.map(user => 
                             <tr>
-                                <td className="pt-3"><Input type="checkbox" className="checkTable" /></td>
+                                <td className="pt-3"><Input type="checkbox" className="checkTable" onChange={() => handleDeleteChecked(user.id)} checked={deleteChecked.includes(user.id)} /></td>
                                 <td className="pt-3">{user.first_name}</td>
                                 <td className="pt-3">{user.last_name}</td>
                                 <td className="pt-3">{sliceAndCapsArr(user.type)}</td>

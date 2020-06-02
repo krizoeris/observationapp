@@ -18,7 +18,7 @@ const UserDelete = ({id, toggle, fname, lname, loadUser}) => {
         })
         const response = await deleteUser.json()
         
-        if(response.success) {
+        if(response.success === true) {
             NotificationManager.warning(`${fname} ${lname}`, 'Successfully Deleted!');
             loadUser()
             toggle()
