@@ -8,6 +8,10 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import AppContext from '../../AppContext';
 
 const Login = () => {
+    // Global State
+    const [globalState, setGlobalState] = useContext(AppContext);
+
+    // Local State
     const [loading, setLoading] = useState(false)
     const [inputs, setInputs] = useState({
         emailInput: '',
@@ -18,8 +22,6 @@ const Login = () => {
         emailError: '', 
         passwordError: ''
     })
-
-    const [globalState, setGlobalState] = useContext(AppContext);
 
     let history = useHistory()
     let location = useLocation()
@@ -71,6 +73,12 @@ const Login = () => {
                 sessionStorage.setItem('token', json.token);
                 sessionStorage.setItem('userAccess', JSON.stringify(json.user));
                 sessionStorage.setItem('isAdmin', true);
+
+                setGlobalState({
+                    ...globalState,
+                    user: json.user
+                })
+
                 history.push("/admin/", { message: 'Successfully Logged In!' })
             } else {
                 NotificationManager.error('Invalid User Login!');

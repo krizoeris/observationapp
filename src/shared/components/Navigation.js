@@ -1,5 +1,5 @@
 // Dependencies
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { 
@@ -17,23 +17,25 @@ import './Navigation.css';
 import AppContext from '../../AppContext';
 
 const Navigation = ({type, redirectLogin}) => {
-    // Local State
-    const [collapsed, setCollapsed] = useState(true);
-
+    // Global State
     const [globalState, setGlobalState] = useContext(AppContext);
 
+    // Local State
+    const [collapsed, setCollapsed] = useState(true);
+    
     const toggleNavbar = () => setCollapsed(!collapsed);
 
     let history = useHistory()
 
     const logOut = () => {
         sessionStorage.clear()
+        localStorage.clear()
         history.push(redirectLogin, { message: 'Successfully Logged Out!' })
     }
 
     return (
         <Navbar className="main-nav shadow-sm" color="dark" dark expand="lg">
-            <NavbarBrand className="navbar-brand" href="#">Observation App</NavbarBrand>
+            <NavbarBrand className="navbar-brand" href="/">Observation App</NavbarBrand>
             {(type === "admin" || type === "user") &&
                 <NavbarToggler onClick={toggleNavbar} className="mr-2" />
             }
@@ -92,7 +94,7 @@ const Navigation = ({type, redirectLogin}) => {
                     <Nav navbar>
                         <UncontrolledDropdown className="p-1" nav inNavbar>
                             <DropdownToggle nav caret>
-                                
+                                {globalState.user && globalState.user.name }
                             </DropdownToggle>
                             <DropdownMenu right>
                                 <DropdownItem onClick={logOut}>Logout</DropdownItem>

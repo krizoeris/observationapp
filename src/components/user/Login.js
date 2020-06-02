@@ -11,6 +11,10 @@ import {
 import AppContext from '../../AppContext';
 
 const Login = () => {
+    // Global State
+    const [globalState, setGlobalState] = useContext(AppContext);
+
+    //Local State
     const [loading, setLoading] = useState(false)
     const [inputs, setInputs] = useState({
         emailInput: '',
@@ -21,8 +25,6 @@ const Login = () => {
         emailError: '', 
         passwordError: ''
     })
-
-    const [globalState, setGlobalState] = useContext(AppContext);
 
     let history = useHistory()
     let location = useLocation()
@@ -70,10 +72,16 @@ const Login = () => {
     
             let json = await response.json();
     
-            if(json.success && !json.user.type.includes('admin')) {
+            if(json.success) {
                 sessionStorage.setItem('token', json.token);
                 sessionStorage.setItem('userAccess', JSON.stringify(json.user));
                 sessionStorage.setItem('isUser', true);
+
+                setGlobalState({
+                    ...globalState,
+                    user: json.user
+                })
+
                 history.push("/", { message: 'Successfully Logged In!' })
             } else {
                 NotificationManager.error('Invalid User Login!');
