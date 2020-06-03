@@ -1,10 +1,11 @@
 import React from 'react'
+import { Table } from 'reactstrap'
 
 // <Header class="p-0" column="Users">Children</Header>
 
-const Table = (prop) => {
+const TableComponent = (prop) => {
     return (
-        <table className={(prop.class) ? 'table '+prop.class : 'table'}>
+        <Table responsive className={(prop.class) ? 'table '+prop.class : 'table'}>
             {prop.columns &&
             <thead>
                 <tr>
@@ -17,8 +18,8 @@ const Table = (prop) => {
             <tbody>
                 {prop.children}
             </tbody>
-        </table>
+        </Table>
     )
 }
 
-export default Table
+export default TableComponent

@@ -31,6 +31,12 @@ a:hover {
     font-weight: bold;
 }
 
+/* bootstrap */
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 7px;

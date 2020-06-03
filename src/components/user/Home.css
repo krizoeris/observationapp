@@ -1,0 +1,33 @@
+.btn-carousel-left, .btn-carousel-right {
+    color: #194b9c !important;
+    font-size: 14px;
+    margin: 5px;
+    padding: 4px 7px;
+    background-color: #fff !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    display: inline-block;
+    cursor: pointer;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.15);
+    font-size: 1em !important;
+    font-weight: 700;
+    outline: none !important;
+    text-align: center;
+}
+
+.btn-carousel-right {
+    right: -20px;
+    position: absolute;
+    top: 30%;
+}
+
+.btn-carousel-left {
+    left: -20px;
+    position: absolute;
+    top: 30%;
+}
+
+.btn:focus {
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.15);
+}
