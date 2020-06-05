@@ -5,7 +5,7 @@ import { Table } from 'reactstrap'
 
 const TableComponent = (prop) => {
     return (
-        <Table responsive className={(prop.class) ? 'table '+prop.class : 'table'}>
+        <Table responsive size={prop.size && prop.size} borderless={prop.borderless && true} className={(prop.class) ? 'table '+prop.class : 'table'}>
             {prop.columns &&
             <thead>
                 <tr>

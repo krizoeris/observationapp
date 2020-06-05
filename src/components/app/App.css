@@ -1,5 +1,6 @@
 body {
     background: #f5f3f2;
+    height: 100vh;
 }
 
 a:hover {
@@ -9,6 +10,14 @@ a:hover {
 .bg-main {
     background: #2653a7 !important;
     color: #fff;
+}
+
+.bg-light-2 {
+    background: #e6e6e6 !important;
+}
+
+.text-main {
+    color: #2653a7 !important;
 }
 
 .checkTable
