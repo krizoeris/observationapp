@@ -10,7 +10,7 @@ const TableComponent = (prop) => {
             <thead>
                 <tr>
                     {prop.columns.map(column => 
-                        <th scope="col" width={prop.width && prop.width}>{column}</th>
+                        <th className="border-top-0" scope="col" width={prop.width && prop.width}>{column}</th>
                     )}
                 </tr>
             </thead>

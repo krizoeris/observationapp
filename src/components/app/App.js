@@ -13,6 +13,7 @@ import Navigation from '../../shared/components/Navigation';
 import Login from '../user/Login';
 import Home from '../user/Home';
 import Observations from '../user/observations/Observations';
+import Observe from '../user/observations/Observe.js';
 import Reports from '../user/reports/Reports';
 
 // Admin Pages
@@ -110,6 +111,7 @@ function App() {
           <UserLoginRoute path="/login" component={Login} />
           <UserRoute exact path="/" component={Home} />
           <UserRoute exact path="/observations" component={Observations} />
+          <AdminRoute path="/observations/:id" component={Observe} />
           <UserRoute path="/reports" component={Reports} />
 
           <AdminLoginRoute path="/admin/login" component={AdminLogin} />

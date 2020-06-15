@@ -2,10 +2,10 @@
 import React, { useEffect } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import { Card, CardBody, Badge } from 'reactstrap';
+import { Card, CardBody, Badge, Button } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFolderOpen, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faFolderOpen, faChevronLeft, faChevronRight, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
@@ -18,7 +18,6 @@ const Home = () => {
     let location = useLocation()
 
     useEffect(() => {
-        console.log(location)
         if(location.state) {
             NotificationManager.success(location.state.message);
             history.replace({ ...history.location, state: undefined });
@@ -29,6 +28,11 @@ const Home = () => {
 
     return (
         <div>
+            <div className="bg-white p-2 d-flex">
+                <div className="container">
+                    <Button color="success"><FontAwesomeIcon icon={faPlusCircle} /> Start Observation</Button>
+                </div>
+            </div>  
             <div className="Home container mt-4">
                 <h3>Overall Assessments</h3>
                 <CarouselProvider
