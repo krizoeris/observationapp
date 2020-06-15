@@ -1,5 +1,6 @@
 // Dependencies
 import React, { useEffect, useState, useContext} from 'react'
+import { useHistory } from 'react-router-dom'
 import { Form, FormGroup, FormFeedback, Input, Label, Button} from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
@@ -29,6 +30,8 @@ const StartObservation = ({ subjectTeacher }) => {
         subjectError: "",
         gradeError: "",
     })
+
+    let history = useHistory()
 
     const getFormsData = async () => {
         let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/forms`, {
@@ -114,7 +117,16 @@ const StartObservation = ({ subjectTeacher }) => {
     const handleStart = e => {
         e.preventDefault()
         if(validate()) {
-            console.log('shoot')
+            let urlEncrypt = { 
+                form_id: inputs.form,
+                teacher_id: inputs.teacher,
+                subject_id: inputs.subject,
+                grade_id: inputs.grade
+            }
+
+            urlEncrypt = JSON.stringify(urlEncrypt)
+            urlEncrypt = btoa(urlEncrypt)
+            history.push(`/observe/${urlEncrypt}`)
         }
     }
 

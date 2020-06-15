@@ -85,6 +85,23 @@ function App() {
     )
   }
 
+  // User Observe
+  const UserObserveRoute = ({component: Component, ...restOfProps}) => {
+    return(
+      <div>
+        <Route {...restOfProps} 
+          render={
+            () => (sessionStorage.getItem('isUser') && sessionStorage.getItem('token')) ?
+            (<Component {...restOfProps} />) :
+            (<Redirect to={
+              {pathname: '/login'}
+            } />)
+          }
+        />
+      </div>
+    )
+  }
+
   // User Login Routes
   const UserLoginRoute = ({component: Component, ...restOfProps}) => {
     return(
@@ -111,7 +128,7 @@ function App() {
           <UserLoginRoute path="/login" component={Login} />
           <UserRoute exact path="/" component={Home} />
           <UserRoute exact path="/observations" component={Observations} />
-          <AdminRoute path="/observations/:id" component={Observe} />
+          <UserObserveRoute path="/observe/:id" component={Observe} />
           <UserRoute path="/reports" component={Reports} />
 
           <AdminLoginRoute path="/admin/login" component={AdminLogin} />

@@ -155,7 +155,7 @@ const Ratings = () => {
                 <h5>Ratings</h5>
             </div>
             {!loading && 
-            <Table class="table-bordered table-sm" columns={['Name', 'Score', '']}>
+            <Table class="table-bordered border-top table-sm" columns={['Name', 'Score', '']}>
                 {ratings.map((rating, index) => 
                     <tr>
                         <td>

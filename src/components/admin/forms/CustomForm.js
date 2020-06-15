@@ -308,7 +308,7 @@ const CustomForm = ({match}) => {
                                     onChange={e => setQuestionInput('title', index, e.target.value)}
                                     invalid={(!errors.titleError || editQuestion.id!==q.id) ? false : true} />
                             <FormFeedback>{errors.titleError}</FormFeedback>
-                            <Table class="table-bordered table-sm mt-4" columns={ratings.ratingsTable} width={`${100/ratings.ratings.length}%`}>
+                            <Table class="table-bordered border-top table-sm mt-4" columns={ratings.ratingsTable} width={`${100/ratings.ratings.length}%`}>
                                 {(q.type === 'rubric') &&
                                     <tr>
                                         {ratings.ratings.map((r, aIndex) => 

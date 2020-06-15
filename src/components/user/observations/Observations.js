@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { Badge, Container, Input, Button } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFolderOpen, faUser, faArrowAltCircleLeft, faPlusCircle, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
+import { faFolderOpen, faUser, faFileSignature } from '@fortawesome/free-solid-svg-icons'
 import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
 import 'pure-react-carousel/dist/react-carousel.es.css';
 
@@ -82,7 +82,7 @@ const Observations = () => {
 
             <div style={{width: 'calc(100% - 300px)', height: '100%', marginLeft: '300px'}}>
                 <div className="bg-white p-2 d-flex">
-                    <Button color="success" onClick={toggleObserverModal}><FontAwesomeIcon icon={faPlayCircle} /> Start Observation</Button>
+                    <Button color="success" onClick={toggleObserverModal}><FontAwesomeIcon icon={faFileSignature} /> Start Observation</Button>
                 </div>  
                 <Container>
                     <Table className="m-0" columns={['Teacher', 'Observer', 'Form', 'Date', 'Status', '']}>
